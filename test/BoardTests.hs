@@ -7,7 +7,8 @@ import Data.Maybe
 
 boardPrintingTests :: Test
 boardPrintingTests = TestList [
-        "rnbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact initialBoard
+          "rnbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact initialBoard
+        , "        \n        \n        \n        \n        \n        \n        \n        \n" ~=? printBoardCompact emptyBoard
         ]
 
 boardCoordinateTests :: Test
