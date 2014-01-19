@@ -1,4 +1,5 @@
-module Piece (Piece(..), Color(..), PieceType(..), opponent, printPiece) where
+module Piece (Piece(..), Color(..), PieceType(..), opponent, printPiece,
+              parsePiece) where
 
 import Data.Char
 
@@ -23,3 +24,10 @@ printPiece (Piece color pieceType) = case color of
                                White -> [toUpper c]
                                Black -> [toLower c]
     where (Just c) = lookup pieceType pieceChars
+
+parsePiece :: Char -> Maybe Piece
+parsePiece c = do
+  pieceType <- rlookup (toUpper c) pieceChars
+  return (if isUpper c then Piece White pieceType else Piece Black pieceType)
+    where rlookup x = lookup x . map swap
+          swap (x, y) = (y, x)
