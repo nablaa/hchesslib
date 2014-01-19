@@ -1,4 +1,5 @@
-module Move (GameState(..), Move(..), isLegalMove, applyMove) where
+module Move (GameState(..), Move(..), CastlingType(..),
+             isLegalMove, applyMove, initialState) where
 
 import Piece
 import Board
@@ -26,6 +27,9 @@ data CastlingType = Short | Long
 
 data MoveError = WrongPlayer | InvalidCoordinates
                deriving (Show, Eq)
+
+initialState :: GameState
+initialState = State initialBoard White [Long, Short] [Long, Short] Nothing 0 1
 
 isLegalMove :: GameState -> Move -> Bool
 isLegalMove = undefined
