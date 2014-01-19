@@ -1,4 +1,4 @@
-module Board (Board, initialBoard, emptyBoard, printBoardCompact,
+module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               parseCoordinate, isInsideBoard) where
 
 import Data.Array
