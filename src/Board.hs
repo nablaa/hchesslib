@@ -1,12 +1,24 @@
-module Board (Board, initialBoard, emptyBoard, printBoardCompact) where
+module Board (Board, initialBoard, emptyBoard, printBoardCompact,
+              parseCoordinate, isInsideBoard) where
 
 import Data.Array
+import Data.Char
 import Piece
 
 data Square = Square Piece | Empty
               deriving (Eq, Show)
 
-type Coordinates = (Int, Int)
+{-
+(0,0)          (0,7)
+   +---> column
+   |
+   |
+   v
+  row
+
+ (7,0)         (7,7)
+-}
+type Coordinates = (Int, Int) -- | (row, column)
 type Board = Array Coordinates Square
 
 initialBoard :: Board
@@ -27,3 +39,12 @@ printBoardCompact board = toLines $ foldr f "" (elems board)
     where f = (:) . squareToChar
           toLines [] = []
           toLines str = take 8 str ++ "\n" ++ toLines (drop 8 str)
+
+isInsideBoard :: Coordinates -> Bool
+isInsideBoard (i, j) = i >= 0 && i <= 7 && j >= 0 && j <= 7
+
+parseCoordinate :: String -> Maybe Coordinates
+parseCoordinate (column:row:[]) | isInsideBoard coordinates = Just coordinates
+                                    | otherwise = Nothing
+    where coordinates = (ord '8' - ord row, ord column - ord 'a')
+parseCoordinate _ = Nothing
