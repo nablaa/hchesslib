@@ -17,7 +17,7 @@ cabal-version:       >=1.10
 
 Library
   Default-Language:     Haskell2010
-  exposed-modules:      Piece, Board, Move
+  exposed-modules:      Piece, Board, Move, FEN, Notation
   Hs-Source-Dirs:       src
 
   Build-depends:        base
