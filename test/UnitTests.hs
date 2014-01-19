@@ -3,9 +3,10 @@ import Test.HUnit
 import System.Exit (exitFailure, exitSuccess)
 import BoardTests
 import MoveTests
+import FENTests
 
 tests :: Test
-tests = TestList [boardTests, moveTests]
+tests = TestList [boardTests, moveTests, fenTests]
 
 main :: IO ()
 main = do c <- runTestTT tests
