@@ -8,7 +8,8 @@ import Piece
 data Square = Square Piece | Empty
               deriving (Eq, Show)
 
-{-
+{- | (row, column)
+@
 (0,0)          (0,7)
    +---> column
    |
@@ -17,8 +18,9 @@ data Square = Square Piece | Empty
   row
 
  (7,0)         (7,7)
+@
 -}
-type Coordinates = (Int, Int) -- | (row, column)
+type Coordinates = (Int, Int)
 type Board = Array Coordinates Square
 
 initialBoard :: Board
