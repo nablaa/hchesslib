@@ -1,5 +1,5 @@
 module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
-              parseCoordinate, isInsideBoard) where
+              parseCoordinate, isInsideBoard, getPiece, movePiece) where
 
 import Data.Array
 import Data.Char
@@ -48,3 +48,26 @@ parseCoordinate (column:row:[]) | isInsideBoard coordinates = Just coordinates
                                     | otherwise = Nothing
     where coordinates = (ord '8' - ord row, ord column - ord 'a')
 parseCoordinate _ = Nothing
+
+movePiece :: Board -> Coordinates -> Coordinates -> Maybe Board
+movePiece _ start end | not (isInsideBoard start) || not (isInsideBoard end) = Nothing
+movePiece board start end = case startPiece of
+                                    Nothing -> Nothing
+                                    Just piece -> Just $ addPiece board' end piece
+        where startPiece = getPiece board start
+              board' = removePiece board start
+
+addPiece :: Board -> Coordinates -> Piece -> Board
+addPiece board coordinates = updateBoard board coordinates . Square
+
+removePiece :: Board -> Coordinates -> Board
+removePiece board coordinates = updateBoard board coordinates Empty
+
+updateBoard :: Board -> Coordinates -> Square -> Board
+updateBoard board coordinates square = board // [(coordinates, square)]
+
+getPiece :: Board -> Coordinates -> Maybe Piece
+getPiece board coordinates | inRange (bounds board) coordinates = f $ board ! coordinates
+                           where f Empty = Nothing
+                                 f (Square piece) = Just piece
+getPiece _ _ = Nothing

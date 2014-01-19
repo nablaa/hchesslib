@@ -1,7 +1,9 @@
 module BoardTests where
 
+import Piece
 import Board
 import Test.HUnit
+import Data.Maybe
 
 boardPrintingTests :: Test
 boardPrintingTests = TestList [
@@ -35,5 +37,26 @@ boardCoordinateTests = TestList [
         , Nothing ~=? parseCoordinate "a-1"
         ]
 
+getPieceTest :: Test
+getPieceTest = TestList [
+          Nothing ~=? getPiece initialBoard (4, 4)
+        , Nothing ~=? getPiece initialBoard (-1, -1)
+        , Nothing ~=? getPiece initialBoard (8, 8)
+        , Just (Piece Black Rook) ~=? getPiece initialBoard (0, 0)
+        , Just (Piece Black Queen) ~=? getPiece initialBoard (0, 3)
+        , Just (Piece White King) ~=? getPiece initialBoard (7, 4)
+        ]
+
+movePieceTest :: Test
+movePieceTest = TestList [
+          Nothing ~=? movePiece initialBoard (0, 0) (8, 8)
+        , Nothing ~=? movePiece initialBoard (-1, -1) (7, 7)
+        , Nothing ~=? movePiece initialBoard (4, 4) (0, 0)
+        , " nbqkbnr\npppppppp\n        \n        \n    r   \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact (fromJust (movePiece initialBoard (0, 0) (4, 4)))
+        , "rnbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact (fromJust (movePiece initialBoard (0, 0) (0, 0)))
+        , " rbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact (fromJust (movePiece initialBoard (0, 0) (0, 1)))
+        ]
+
 boardTests :: Test
-boardTests = TestList [boardPrintingTests, boardCoordinateTests]
+boardTests = TestList [boardPrintingTests, boardCoordinateTests,
+                       getPieceTest, movePieceTest]
