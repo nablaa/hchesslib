@@ -1,17 +1,17 @@
 import Test.HUnit
 
 import System.Exit (exitFailure, exitSuccess)
+import Board
 
-exampleTest :: Test
-exampleTest = TestList [
-          1 ~=? 2 - 1
-        , 2 ~=? 3 - 1
+boardPrintingTests :: Test
+boardPrintingTests = TestList [
+        "rnbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact initialBoard
         ]
 
 tests :: Test
-tests = exampleTest
+tests = boardPrintingTests
 
 main :: IO ()
-main = do c <- runTestTT $ tests
+main = do c <- runTestTT tests
           if failures c > 0 || errors c > 0 then exitFailure
                                             else exitSuccess
