@@ -1,8 +1,10 @@
 module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
-              parseCoordinate, isInsideBoard, getPiece, movePiece) where
+              parseCoordinate, isInsideBoard, getPiece, movePiece,
+              parseBoardCompact) where
 
 import Data.Array
 import Data.Char
+import Data.List
 import Piece
 
 data Square = Square Piece | Empty
@@ -73,3 +75,20 @@ getPiece board coordinates | inRange (bounds board) coordinates = f $ board ! co
                            where f Empty = Nothing
                                  f (Square piece) = Just piece
 getPiece _ _ = Nothing
+
+parseBoardCompact :: String -> Maybe Board
+parseBoardCompact str | length str /= 72 = Nothing
+                      | length rows /= 8 || nub (map length rows) /= [8] = Nothing
+                      | otherwise = squares >>= boardFromSquares
+        where rows = lines str
+              squares = mapM parseSquare (concat rows)
+
+parseSquare :: Char -> Maybe Square
+parseSquare ' ' = Just Empty
+parseSquare c = case parsePiece c of
+                        Nothing -> Nothing
+                        Just piece -> Just $ Square piece
+
+boardFromSquares :: [Square] -> Maybe Board
+boardFromSquares squares | length squares /= 64 = Nothing
+                         | otherwise = Just $ listArray ((0, 0), (7, 7)) squares
