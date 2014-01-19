@@ -1,4 +1,4 @@
-module Move (GameState(..), isLegalMove, applyMove) where
+module Move (GameState(..), Move(..), isLegalMove, applyMove) where
 
 import Piece
 import Board
