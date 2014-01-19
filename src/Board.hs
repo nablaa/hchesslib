@@ -1,6 +1,6 @@
 module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               parseCoordinate, isInsideBoard, getPiece, movePiece,
-              parseBoardCompact) where
+              parseBoardCompact, printCoordinate) where
 
 import Data.Array
 import Data.Char
@@ -52,6 +52,9 @@ parseCoordinate (column:row:[]) | isInsideBoard coordinates = Just coordinates
                                     | otherwise = Nothing
     where coordinates = (ord '8' - ord row, ord column - ord 'a')
 parseCoordinate _ = Nothing
+
+printCoordinate :: Coordinates -> String
+printCoordinate (r, c) = [chr (ord 'a' + c), intToDigit (8 - r)]
 
 movePiece :: Board -> Coordinates -> Coordinates -> Maybe Board
 movePiece _ start end | not (isInsideBoard start) || not (isInsideBoard end) = Nothing

@@ -36,6 +36,12 @@ boardCoordinateTests = TestList [
         , Nothing ~=? parseCoordinate "i1"
         , Nothing ~=? parseCoordinate "a9"
         , Nothing ~=? parseCoordinate "a-1"
+        , "a8" ~=? printCoordinate (0, 0)
+        , "b8" ~=? printCoordinate (0, 1)
+        , "c8" ~=? printCoordinate (0, 2)
+        , "a7" ~=? printCoordinate (1, 0)
+        , "a6" ~=? printCoordinate (2, 0)
+        , "f5" ~=? printCoordinate (3, 5)
         ]
 
 getPieceTest :: Test
