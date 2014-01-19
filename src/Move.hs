@@ -23,13 +23,13 @@ data Move = Movement Piece Coordinates Coordinates
           deriving (Show, Eq)
 
 data CastlingType = Short | Long
-                  deriving (Show, Eq)
+                  deriving (Show, Eq, Ord)
 
 data MoveError = WrongPlayer | InvalidCoordinates
                deriving (Show, Eq)
 
 initialState :: GameState
-initialState = State initialBoard White [Long, Short] [Long, Short] Nothing 0 1
+initialState = State initialBoard White [Short, Long] [Short, Long] Nothing 0 1
 
 isLegalMove :: GameState -> Move -> Bool
 isLegalMove = undefined
