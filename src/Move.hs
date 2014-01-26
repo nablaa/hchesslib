@@ -1,7 +1,7 @@
 module Move (GameState(..), Move(..), CastlingType(..),
              MoveError(..), isRightPlayerMove,
              isLegalMove, applyMove, initialState,
-             isCorrectStartPiece) where
+             isCorrectStartPiece, areCoordinatesValid) where
 
 import Piece
 import Board
@@ -60,3 +60,7 @@ rightPlayer :: Color -> Color -> Maybe MoveError
 rightPlayer player color | player == color = Nothing
                          | otherwise = Just WrongPlayer
 
+areCoordinatesValid :: Coordinates -> Coordinates -> Maybe MoveError
+areCoordinatesValid start end | start == end = Just InvalidCoordinates
+                              | not (isInsideBoard start) || not (isInsideBoard end) = Just InvalidCoordinates
+                              | otherwise = Nothing

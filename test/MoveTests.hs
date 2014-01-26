@@ -31,9 +31,18 @@ isRightPlayerMoveTests = TestList [
         , Just WrongPlayer ~=? isRightPlayerMove Black (PawnDoubleMove (Piece White Pawn) (coord "e2") (coord "e3"))
         ]
 
+areCoordinatesValidTests :: Test
+areCoordinatesValidTests = TestList [
+          Nothing ~=? areCoordinatesValid (0, 0) (1, 2)
+        , Nothing ~=? areCoordinatesValid (4, 4) (0, 7)
+        , Just InvalidCoordinates ~=? areCoordinatesValid (3, 3) (3, 3)
+        , Just InvalidCoordinates ~=? areCoordinatesValid (-1, 0) (3, 3)
+        , Just InvalidCoordinates ~=? areCoordinatesValid (7, 0) (7, 8)
+        ]
+
 coord :: String -> Coordinates
 coord = fromJust . parseCoordinate
 
 
 moveTests :: Test
-moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests]
+moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests]
