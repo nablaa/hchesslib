@@ -29,7 +29,7 @@ writeEnPassant Nothing = "-"
 writeEnPassant (Just coordinate) = printCoordinate coordinate
 
 writeFEN :: GameState -> String
-writeFEN state = unwords [writeBoard (board state),
+writeFEN state = unwords [writeBoard (stateBoard state),
                           writePlayer (currentPlayer state),
                           writeCastlings (whiteCastlingsPossible state) (blackCastlingsPossible state),
                           writeEnPassant (enPassantSquare state),
