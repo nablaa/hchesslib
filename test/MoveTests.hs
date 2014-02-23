@@ -71,6 +71,37 @@ generateAllBishopMovesTests = TestList [testGeneratingMoves generateAllBishopMov
                                        , Capture (Piece White Bishop) (coord "d3") (coord "f5")
                                        ]]
 
+generateAllQueenMovesTests :: Test
+generateAllQueenMovesTests = TestList [testGeneratingMoves generateAllQueenMoves
+                                      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" "d1"
+                                      [],
+                                      testGeneratingMoves generateAllQueenMoves
+                                      "rnb1kbnr/pppp1ppp/8/5p2/8/3B4/PPPP3P/Rq1QKN2 b Qkq - 4 12" "b1"
+                                      [ Movement (Piece Black Queen) (coord "b1") (coord "c1")
+                                      , Capture (Piece Black Queen) (coord "b1") (coord "a1")
+                                      , Capture (Piece Black Queen) (coord "b1") (coord "a2")
+                                      , Capture (Piece Black Queen) (coord "b1") (coord "b2")
+                                      , Capture (Piece Black Queen) (coord "b1") (coord "c2")
+                                      , Capture (Piece Black Queen) (coord "b1") (coord "d1")
+                                      ],
+                                      testGeneratingMoves generateAllQueenMoves
+                                      "r2qkb1r/ppnp2pp/4pp1n/4b3/2Q2P2/1P2P3/1P2BPPP/RPB1K1NR w KQkq - 2 13" "c4"
+                                      [ Movement (Piece White Queen) (coord "c4") (coord "b5")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "a6")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "d5")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "d3")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "b4")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "a4")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "c5")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "c6")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "d4")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "e4")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "c3")
+                                      , Movement (Piece White Queen) (coord "c4") (coord "c2")
+                                      , Capture (Piece White Queen) (coord "c4") (coord "c7")
+                                      , Capture (Piece White Queen) (coord "c4") (coord "e6")
+                                      ]]
+
 testGeneratingMoves :: (GameState -> Coordinates -> [Move]) -> String -> String -> [Move] -> Test
 testGeneratingMoves func fen square moves = TestList [
           TestLabel ("Correct move count for: '" ++ fen ++ "' => " ++ square) (length moves ~=? length generated)
@@ -87,4 +118,4 @@ game = fromJust . readFEN
 
 moveTests :: Test
 moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests,
-                      generateAllRookMovesTests, generateAllBishopMovesTests]
+                      generateAllRookMovesTests, generateAllBishopMovesTests, generateAllQueenMovesTests]
