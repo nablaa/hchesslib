@@ -4,7 +4,7 @@ module Move (GameState(..), Move(..), CastlingType(..),
              isCorrectStartPiece, areCoordinatesValid,
              generateAllRookMoves, iterateMovementSquares,
              iterateDirection, generateAllBishopMoves,
-             generateAllQueenMoves)  where
+             generateAllQueenMoves, generateAllKnightMoves)  where
 
 import Piece
 import Board
@@ -78,11 +78,23 @@ generateAllBishopMoves game coords = patternMoves game coords bishopPattern
 generateAllQueenMoves :: GameState -> Coordinates -> [Move]
 generateAllQueenMoves game coords = patternMoves game coords (rookPattern ++ bishopPattern)
 
+generateAllKnightMoves :: GameState -> Coordinates -> [Move]
+generateAllKnightMoves game coords = map (\coordinate -> Movement piece coords coordinate) emptySquares
+                                     ++ map (\coordinate -> Capture piece coords coordinate) opponentSquares
+        where squares = filter isInsideBoard [squareDiff coords jump | jump <- knightPattern]
+              board = stateBoard game
+              emptySquares = filter (isEmpty board) squares
+              piece@(Piece player _) = fromJust $ getPiece board coords
+              opponentSquares = filter (\square -> isOpponentSquare board square player) squares
+
 rookPattern :: [(Int, Int)]
 rookPattern = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 bishopPattern :: [(Int, Int)]
 bishopPattern = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+
+knightPattern :: [(Int, Int)]
+knightPattern = [(-2, -1), (-1, -2), (1, -2), (2, -1), (-2, 1), (-1, 2), (1, 2), (2, 1)]
 
 patternMoves :: GameState -> Coordinates -> [(Int, Int)] -> [Move]
 patternMoves game start pattern

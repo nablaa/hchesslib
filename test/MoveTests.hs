@@ -102,6 +102,21 @@ generateAllQueenMovesTests = TestList [testGeneratingMoves generateAllQueenMoves
                                       , Capture (Piece White Queen) (coord "c4") (coord "e6")
                                       ]]
 
+generateAllKnightMovesTests :: Test
+generateAllKnightMovesTests = TestList [testGeneratingMoves generateAllKnightMoves
+                                       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" "b1"
+                                       [ Movement (Piece White Knight) (coord "b1") (coord "a3")
+                                       , Movement (Piece White Knight) (coord "b1") (coord "c3")
+                                       ],
+                                       testGeneratingMoves generateAllKnightMoves
+                                       "r2qkbnr/2p1pppp/ppp5/bn6/3P4/2P5/PP2PPPP/RNBQKBNR b - - 3 7" "b5"
+                                       [ Movement (Piece Black Knight) (coord "b5") (coord "d6")
+                                       , Movement (Piece Black Knight) (coord "b5") (coord "a7")
+                                       , Movement (Piece Black Knight) (coord "b5") (coord "a3")
+                                       , Capture (Piece Black Knight) (coord "b5") (coord "c3")
+                                       , Capture (Piece Black Knight) (coord "b5") (coord "d4")
+                                       ]]
+
 testGeneratingMoves :: (GameState -> Coordinates -> [Move]) -> String -> String -> [Move] -> Test
 testGeneratingMoves func fen square moves = TestList [
           TestLabel ("Correct move count for: '" ++ fen ++ "' => " ++ square) (length moves ~=? length generated)
@@ -118,4 +133,4 @@ game = fromJust . readFEN
 
 moveTests :: Test
 moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests,
-                      generateAllRookMovesTests, generateAllBishopMovesTests, generateAllQueenMovesTests]
+                      generateAllRookMovesTests, generateAllBishopMovesTests, generateAllQueenMovesTests, generateAllKnightMovesTests]
