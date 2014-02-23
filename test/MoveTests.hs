@@ -57,6 +57,19 @@ generateAllRookMovesTests = TestList [testGeneratingMoves generateAllRookMoves
                                      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" "a1"
                                      []]
 
+generateAllBishopMovesTests :: Test
+generateAllBishopMovesTests = TestList [testGeneratingMoves generateAllBishopMoves
+                                       "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" "c1"
+                                       [],
+                                       testGeneratingMoves generateAllBishopMoves
+                                       "rnb1kbnr/pppp1ppp/8/5p2/8/3B4/PPPP3P/Rq1QKN2 w Qkq - 4 12" "d3"
+                                       [ Movement (Piece White Bishop) (coord "d3") (coord "c4")
+                                       , Movement (Piece White Bishop) (coord "d3") (coord "b5")
+                                       , Movement (Piece White Bishop) (coord "d3") (coord "a6")
+                                       , Movement (Piece White Bishop) (coord "d3") (coord "e4")
+                                       , Movement (Piece White Bishop) (coord "d3") (coord "e2")
+                                       , Capture (Piece White Bishop) (coord "d3") (coord "f5")
+                                       ]]
 
 testGeneratingMoves :: (GameState -> Coordinates -> [Move]) -> String -> String -> [Move] -> Test
 testGeneratingMoves func fen square moves = TestList [
@@ -74,4 +87,4 @@ game = fromJust . readFEN
 
 moveTests :: Test
 moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests,
-                      generateAllRookMovesTests]
+                      generateAllRookMovesTests, generateAllBishopMovesTests]

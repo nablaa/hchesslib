@@ -3,7 +3,7 @@ module Move (GameState(..), Move(..), CastlingType(..),
              isLegalMove, applyMove, initialState,
              isCorrectStartPiece, areCoordinatesValid,
              generateAllRookMoves, iterateMovementSquares,
-             iterateDirection)  where
+             iterateDirection, generateAllBishopMoves)  where
 
 import Piece
 import Board
@@ -70,6 +70,9 @@ areCoordinatesValid start end | start == end = Just InvalidCoordinates
 
 generateAllRookMoves :: GameState -> Coordinates -> [Move]
 generateAllRookMoves game coords = patternMoves game coords [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+generateAllBishopMoves :: GameState -> Coordinates -> [Move]
+generateAllBishopMoves game coords = patternMoves game coords [(-1, -1), (-1, 1), (1, -1), (1, 1)]
 
 patternMoves :: GameState -> Coordinates -> [(Int, Int)] -> [Move]
 patternMoves game start pattern
