@@ -1,10 +1,11 @@
 module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               parseCoordinate, isInsideBoard, getPiece, movePiece,
-              parseBoardCompact, printCoordinate) where
+              parseBoardCompact, printCoordinate, isEmpty, isOpponentSquare) where
 
 import Data.Array
 import Data.Char
 import Data.List
+import Data.Maybe
 import Piece
 
 data Square = Square Piece | Empty
@@ -78,6 +79,14 @@ getPiece board coordinates | inRange (bounds board) coordinates = f $ board ! co
                            where f Empty = Nothing
                                  f (Square piece) = Just piece
 getPiece _ _ = Nothing
+
+isEmpty :: Board -> Coordinates -> Bool
+isEmpty board coordinates = isNothing $ getPiece board coordinates
+
+isOpponentSquare :: Board -> Coordinates -> Color -> Bool
+isOpponentSquare board coordinates player = case getPiece board coordinates of
+                                                    Nothing -> False
+                                                    Just (Piece color _) -> color == opponent player
 
 parseBoardCompact :: String -> Maybe Board
 parseBoardCompact str | length str /= 72 = Nothing

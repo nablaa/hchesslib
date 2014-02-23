@@ -78,6 +78,28 @@ parsingBoardCompactTest = TestList [
         , Nothing ~=? parseBoardCompact "pppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n"
         ]
 
+isEmptyTest :: Test
+isEmptyTest = TestList [
+          True ~=? isEmpty initialBoard (4, 4)
+        , True ~=? isEmpty initialBoard (-1, -1)
+        , True ~=? isEmpty initialBoard (8, 8)
+        , False ~=? isEmpty initialBoard (0, 0)
+        , False ~=? isEmpty initialBoard (0, 3)
+        , False ~=? isEmpty initialBoard (7, 4)
+        ]
+
+isOpponentSquareTest :: Test
+isOpponentSquareTest = TestList [
+          False ~=? isOpponentSquare initialBoard (4, 4) White
+        , False ~=? isOpponentSquare initialBoard (-1, -1) Black
+        , False ~=? isOpponentSquare initialBoard (8, 8) White
+        , False ~=? isOpponentSquare initialBoard (0, 0) Black
+        , True ~=? isOpponentSquare initialBoard (0, 3) White
+        , False ~=? isOpponentSquare initialBoard (7, 4) White
+        , True ~=? isOpponentSquare initialBoard (7, 4) Black
+        ]
+
 boardTests :: Test
 boardTests = TestList [boardPrintingTests, boardCoordinateTests,
-                       getPieceTest, movePieceTest, parsingBoardCompactTest]
+                       getPieceTest, movePieceTest, parsingBoardCompactTest,
+                       isEmptyTest, isOpponentSquareTest]
