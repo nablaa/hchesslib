@@ -22,6 +22,7 @@ Library
 
   Build-depends:        base
                         , array >= 0.4
+                        , containers >= 0.4
 
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
@@ -33,6 +34,7 @@ Test-Suite spec
                         , hspec >= 1.5
                         , QuickCheck
                         , array >= 0.4
+                        , containers >= 0.4
 
 Test-Suite unit
   Type:                 exitcode-stdio-1.0
@@ -44,3 +46,4 @@ Test-Suite unit
                         , HUnit
                         , QuickCheck
                         , array >= 0.4
+                        , containers >= 0.4

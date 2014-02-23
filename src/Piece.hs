@@ -4,13 +4,13 @@ module Piece (Piece(..), Color(..), PieceType(..), opponent, printPiece,
 import Data.Char
 
 data Piece = Piece Color PieceType
-           deriving (Show, Eq)
+           deriving (Show, Eq, Ord)
 
 data Color = White | Black
-           deriving (Show, Eq)
+           deriving (Show, Eq, Ord)
 
 data PieceType = Pawn | Knight | Bishop | Rook | Queen | King
-           deriving (Show, Eq)
+           deriving (Show, Eq, Ord)
 
 opponent :: Color -> Color
 opponent White = Black
