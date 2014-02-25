@@ -129,8 +129,5 @@ iterateDirection :: (GameState -> Coordinates -> Bool) -> GameState -> Coordinat
 iterateDirection condition game start direction = takeWhile (condition game) squares
         where squares = iterateDirectionInsideBoard start direction
 
-iterateDirectionInsideBoard :: Coordinates -> (Int, Int) -> [Coordinates]
-iterateDirectionInsideBoard start direction = tail $ takeWhile isInsideBoard $ iterate (squareDiff direction) start
-
 squareDiff :: (Int, Int) -> (Int, Int) -> (Int, Int)
 squareDiff (xd, yd) (x, y) = (xd + x, yd + y)

@@ -99,7 +99,23 @@ isOpponentSquareTest = TestList [
         , True ~=? isOpponentSquare initialBoard (7, 4) Black
         ]
 
+firstPieceInSquareListTest :: Test
+firstPieceInSquareListTest = TestList [
+          Nothing ~=? firstPieceInSquareList initialBoard [(4, 1), (4, 2), (4, 3)]
+        , Just (Piece White Pawn) ~=? firstPieceInSquareList initialBoard [(4, 1), (5, 2), (6, 3), (7, 4)]
+        , Just (Piece White King) ~=? firstPieceInSquareList initialBoard [(7, 4), (0, 4)]
+        ]
+
+iterateDirectionInsideBoardTest :: Test
+iterateDirectionInsideBoardTest = TestList [
+          [(3,1),(2,1),(1,1),(0,1)] ~=? iterateDirectionInsideBoard (4, 1) (-1, 0)
+        , [(5,2),(6,3),(7,4)] ~=? iterateDirectionInsideBoard (4, 1) (1, 1)
+        , [] ~=? iterateDirectionInsideBoard (4, 0) (0, -1)
+        ]
+
 boardTests :: Test
 boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        getPieceTest, movePieceTest, parsingBoardCompactTest,
-                       isEmptyTest, isOpponentSquareTest]
+                       isEmptyTest, isOpponentSquareTest,
+                       firstPieceInSquareListTest,
+                       iterateDirectionInsideBoardTest]

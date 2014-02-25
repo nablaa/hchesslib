@@ -1,6 +1,7 @@
 module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               parseCoordinate, isInsideBoard, getPiece, movePiece,
-              parseBoardCompact, printCoordinate, isEmpty, isOpponentSquare) where
+              parseBoardCompact, printCoordinate, isEmpty, isOpponentSquare,
+              firstPieceInSquareList, iterateDirectionInsideBoard) where
 
 import Data.Array
 import Data.Char
@@ -104,3 +105,13 @@ parseSquare c = case parsePiece c of
 boardFromSquares :: [Square] -> Maybe Board
 boardFromSquares squares | length squares /= 64 = Nothing
                          | otherwise = Just $ listArray ((0, 0), (7, 7)) squares
+
+firstPieceInSquareList :: Board -> [Coordinates] -> Maybe Piece
+firstPieceInSquareList board coordinates = case firstNonEmpty of
+                                                   [] -> Nothing
+                                                   (coordinate:_) -> getPiece board coordinate
+        where firstNonEmpty = dropWhile (isEmpty board) coordinates
+
+iterateDirectionInsideBoard :: Coordinates -> (Int, Int) -> [Coordinates]
+iterateDirectionInsideBoard start direction = tail $ takeWhile isInsideBoard $ iterate (sumSquares direction) start
+        where sumSquares (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
