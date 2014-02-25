@@ -4,7 +4,9 @@ module Move (GameState(..), Move(..), CastlingType(..),
              isCorrectStartPiece, areCoordinatesValid,
              generateAllRookMoves, iterateMovementSquares,
              iterateDirection, generateAllBishopMoves,
-             generateAllQueenMoves, generateAllKnightMoves)  where
+             generateAllQueenMoves, generateAllKnightMoves,
+             generateAllKingMoves, generateAllPawnMoves,
+             isSquareThreatened)  where
 
 import Piece
 import Board
@@ -87,6 +89,51 @@ generateAllKnightMoves game coords = map (\coordinate -> Movement piece coords c
               piece@(Piece player _) = fromJust $ getPiece board coords
               opponentSquares = filter (\square -> isOpponentSquare board square player) squares
 
+generateAllKingMoves :: GameState -> Coordinates -> [Move]
+generateAllKingMoves game coords = map (\coordinate -> Movement piece coords coordinate) moveSquares
+                                   ++ map (\coordinate -> Capture piece coords coordinate) captureSquares
+                                   ++ kingCastlingMoves game coords
+        where board = stateBoard game
+              piece@(Piece player _) = fromJust $ getPiece board coords
+              moveSquares = kingMoveSquares game coords
+              captureSquares = kingCaptureSquares game coords
+
+generateAllPawnMoves :: GameState -> Coordinates -> [Move]
+generateAllPawnMoves game coords = []
+
+kingMoveSquares :: GameState -> Coordinates -> [Coordinates]
+kingMoveSquares game start = emptySquares
+        where allSquares = map (squareDiff start) (rookPattern ++ bishopPattern)
+              board = stateBoard game
+              emptySquares = filter (isEmpty board) $ filter isInsideBoard allSquares
+
+kingCaptureSquares :: GameState -> Coordinates -> [Coordinates]
+kingCaptureSquares game start = opponentSquares
+        where allSquares = map (squareDiff start) (rookPattern ++ bishopPattern)
+              board = stateBoard game
+              piece@(Piece player _) = fromJust $ getPiece board start
+              opponentSquares = filter (\square -> isOpponentSquare board square player) $ filter isInsideBoard allSquares
+
+kingCastlingMoves :: GameState -> Coordinates -> [Move]
+kingCastlingMoves game coords = map (Castling player) $ filter (isCastlingPossible game player) [Long, Short]
+        where board = stateBoard game
+              (Piece player _) = fromJust $ getPiece board coords
+
+isCastlingPossible :: GameState -> Color -> CastlingType -> Bool
+isCastlingPossible game player castling = castling `elem` possibleCastlings player && all (isEmpty board) squares && traverseSquaresNotThreatened
+        where squares = castlingSquares player castling
+              board = stateBoard game
+              possibleCastlings White = whiteCastlingsPossible game
+              possibleCastlings Black = blackCastlingsPossible game
+              kingSquare = if player == White then (7, 4) else (0, 4)
+              traverseSquaresNotThreatened = not $ any (isSquareThreatened game (opponent player)) (kingSquare : squares)
+
+castlingSquares :: Color -> CastlingType -> [Coordinates]
+castlingSquares White Long = [(7, 1), (7, 2), (7, 3)]
+castlingSquares White Short = [(7, 5), (7, 6)]
+castlingSquares Black Long = [(0, 1), (0, 2), (0, 3)]
+castlingSquares Black Short = [(0, 5), (0, 6)]
+
 rookPattern :: [(Int, Int)]
 rookPattern = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
@@ -131,3 +178,31 @@ iterateDirection condition game start direction = takeWhile (condition game) squ
 
 squareDiff :: (Int, Int) -> (Int, Int) -> (Int, Int)
 squareDiff (xd, yd) (x, y) = (xd + x, yd + y)
+
+isSquareThreatened :: GameState -> Color -> Coordinates -> Bool
+isSquareThreatened game opponentPlayer coords = knightsThreaten || pawnsThreaten || otherPiecesThreaten || kingsThreaten || rookOrQueenThreatens || bishopOrQueenThreatens
+        where board = stateBoard game
+              knightSquares = map (squareDiff coords) knightPattern
+              knightsThreaten = any isOpponentKnight knightSquares
+              isOpponentKnight square = case getPiece board square of
+                                                Just (Piece player Knight) -> player == opponentPlayer
+                                                _ -> False
+              pawnsThreaten = any isOpponentPawn $ map (squareDiff coords) pawnSquares
+              pawnSquares = case opponentPlayer of
+                                    White -> [(1, -1), (1, 1)]
+                                    Black -> [(-1, -1), (-1, 1)]
+              isOpponentPawn square = case getPiece board square of
+                                              Just (Piece player Pawn) -> player == opponentPlayer
+                                              _ -> False
+              otherPiecesThreaten = False
+              kingSquares = map (squareDiff coords) (rookPattern ++ bishopPattern)
+              kingsThreaten = any isOpponentKing kingSquares
+              isOpponentKing square  = case getPiece board square of
+                                                Just (Piece player King) -> player == opponentPlayer
+                                                _ -> False
+              potentialOpponentRookQueenPieces = catMaybes $ map (firstPieceInSquareList board . iterateDirectionInsideBoard coords) rookPattern
+              rookOrQueenThreatens = any isOpponentRookOrQueen potentialOpponentRookQueenPieces
+              isOpponentRookOrQueen (Piece color piecetype) = color == opponentPlayer && piecetype `elem` [Rook, Queen]
+              potentialOpponentBishopQueenPieces = catMaybes $ map (firstPieceInSquareList board . iterateDirectionInsideBoard coords) bishopPattern
+              bishopOrQueenThreatens = any isOpponentBishopOrQueen potentialOpponentBishopQueenPieces
+              isOpponentBishopOrQueen (Piece color piecetype) = color == opponentPlayer && piecetype `elem` [Bishop, Queen]

@@ -117,12 +117,127 @@ generateAllKnightMovesTests = TestList [testGeneratingMoves generateAllKnightMov
                                        , Capture (Piece Black Knight) (coord "b5") (coord "d4")
                                        ]]
 
+generateAllKingMovesTests :: Test
+generateAllKingMovesTests = TestList [testGeneratingMoves generateAllKingMoves
+                                     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" "e1"
+                                     [],
+                                     testGeneratingMoves generateAllKingMoves
+                                     "2b5/pkp1prpp/8/rpn5/1K6/2P5/PP2N1PR/N1Q5 w - - 2 15" "b4"
+                                     [ Movement (Piece White King) (coord "b4") (coord "a4")
+                                     , Movement (Piece White King) (coord "b4") (coord "a3")
+                                     , Movement (Piece White King) (coord "b4") (coord "b3")
+                                     , Movement (Piece White King) (coord "b4") (coord "c4")
+                                     , Capture (Piece White King) (coord "b4") (coord "a5")
+                                     , Capture (Piece White King) (coord "b4") (coord "b5")
+                                     , Capture (Piece White King) (coord "b4") (coord "c5")
+                                     ],
+                                     testGeneratingMoves generateAllKingMoves
+                                     "1rq1kbr1/pppbnn1p/8/8/8/3N4/PPPP2PP/R3K2R w KQ - 0 10" "e1"
+                                     [ Movement (Piece White King) (coord "e1") (coord "d1")
+                                     , Movement (Piece White King) (coord "e1") (coord "e2")
+                                     , Movement (Piece White King) (coord "e1") (coord "f2")
+                                     , Movement (Piece White King) (coord "e1") (coord "f1")
+                                     , Castling White Long
+                                     , Castling White Short
+                                     ],
+                                     -- Castlings invalidated
+                                     testGeneratingMoves generateAllKingMoves
+                                     "r3k2r/ppppp1pp/2n2p2/3b4/8/2B2PPB/PPPPP2P/R3K2R w Qk - 5 14" "e1"
+                                     [ Movement (Piece White King) (coord "e1") (coord "d1")
+                                     , Movement (Piece White King) (coord "e1") (coord "f2")
+                                     , Movement (Piece White King) (coord "e1") (coord "f1")
+                                     , Castling White Long
+                                     ],
+                                     testGeneratingMoves generateAllKingMoves
+                                     "r3k2r/ppppp1pp/2n2p2/3b4/8/2B2PPB/PPPPP2P/R3K2R w Qk - 5 14" "e8"
+                                     [ Movement (Piece Black King) (coord "e8") (coord "d8")
+                                     , Movement (Piece Black King) (coord "e8") (coord "f7")
+                                     , Movement (Piece Black King) (coord "e8") (coord "f8")
+                                     , Castling Black Short
+                                     ],
+                                     -- Piece between castling line
+                                     testGeneratingMoves generateAllKingMoves
+                                     "4k3/n7/8/8/8/5N2/P1N2PPP/R1n1K1R1 w Q - 0 16" "e1"
+                                     [ Movement (Piece White King) (coord "e1") (coord "d1")
+                                     , Movement (Piece White King) (coord "e1") (coord "d2")
+                                     , Movement (Piece White King) (coord "e1") (coord "e2")
+                                     , Movement (Piece White King) (coord "e1") (coord "f1")
+                                     ],
+                                     -- Piece checking castling end square
+                                     testGeneratingMoves generateAllKingMoves
+                                     "3rk1r1/5p2/8/8/3b2N1/5P2/1PP1P1PP/4K2R w K - 2 20" "e1"
+                                     [ Movement (Piece White King) (coord "e1") (coord "d1")
+                                     , Movement (Piece White King) (coord "e1") (coord "d2")
+                                     , Movement (Piece White King) (coord "e1") (coord "f1")
+                                     , Movement (Piece White King) (coord "e1") (coord "f2")
+                                     ],
+                                     -- Piece checking castling middle square
+                                     testGeneratingMoves generateAllKingMoves
+                                     "3rk3/5p2/5r2/8/3P2N1/8/1PP1P1PP/4K2R w K - 0 12" "e1"
+                                     [ Movement (Piece White King) (coord "e1") (coord "d1")
+                                     , Movement (Piece White King) (coord "e1") (coord "d2")
+                                     , Movement (Piece White King) (coord "e1") (coord "f1")
+                                     , Movement (Piece White King) (coord "e1") (coord "f2")
+                                     ],
+                                     -- Castling out of chess not legal
+                                     testGeneratingMoves generateAllKingMoves
+                                     "3rk3/5p2/4r3/8/3P2N1/8/1PP2PPP/4K2R w K - 0 12" "e1"
+                                     [ Movement (Piece White King) (coord "e1") (coord "d1")
+                                     , Movement (Piece White King) (coord "e1") (coord "d2")
+                                     , Movement (Piece White King) (coord "e1") (coord "e2")
+                                     , Movement (Piece White King) (coord "e1") (coord "f1")
+                                     ],
+                                     -- Castling when rook is under attack is legal
+                                     testGeneratingMoves generateAllKingMoves
+                                     "3rk3/5p2/7r/8/3P2N1/8/1PP2PP1/4K2R w K - 0 12" "e1"
+                                     [ Movement (Piece White King) (coord "e1") (coord "d1")
+                                     , Movement (Piece White King) (coord "e1") (coord "d2")
+                                     , Movement (Piece White King) (coord "e1") (coord "e2")
+                                     , Movement (Piece White King) (coord "e1") (coord "f1")
+                                     , Castling White Short
+                                     ]
+                                     ]
+
+generateAllPawnMovesTests :: Test
+generateAllPawnMovesTests = TestList [testGeneratingMoves generateAllPawnMoves
+                                     "" ""
+                                     [
+                                     ]]
+
 testGeneratingMoves :: (GameState -> Coordinates -> [Move]) -> String -> String -> [Move] -> Test
 testGeneratingMoves func fen square moves = TestList [
           TestLabel ("Correct move count for: '" ++ fen ++ "' => " ++ square) (length moves ~=? length generated)
         , TestLabel ("Correct move list for: '" ++ fen ++ "' => " ++ square) (S.fromList moves ~=? S.fromList generated)
         ]
         where generated = func (game fen) (coord square)
+
+isSquareThreatenedTests :: Test
+isSquareThreatenedTests = TestList [
+          False ~=? isSquareThreatened initialState Black (coord "e1")
+        , False ~=? isSquareThreatened initialState Black (coord "e4")
+        , True ~=? isSquareThreatened initialState White (coord "e1")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "c6")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "h5")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g2")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "d8")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "e5")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "f1")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "h1")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g5")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g8")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "d5")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "b4")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g4")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "f4")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "b1")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "f4")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "d8")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "d8")
+        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "f1")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "h6")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "b5")
+        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "c4")
+        ]
 
 coord :: String -> Coordinates
 coord = fromJust . parseCoordinate
@@ -133,4 +248,6 @@ game = fromJust . readFEN
 
 moveTests :: Test
 moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests,
-                      generateAllRookMovesTests, generateAllBishopMovesTests, generateAllQueenMovesTests, generateAllKnightMovesTests]
+                      generateAllRookMovesTests, generateAllBishopMovesTests, generateAllQueenMovesTests,
+                      generateAllKnightMovesTests, generateAllKingMovesTests, generateAllPawnMovesTests,
+                      isSquareThreatenedTests]
