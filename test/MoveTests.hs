@@ -200,9 +200,81 @@ generateAllKingMovesTests = TestList [testGeneratingMoves generateAllKingMoves
 
 generateAllPawnMovesTests :: Test
 generateAllPawnMovesTests = TestList [testGeneratingMoves generateAllPawnMoves
-                                     "" ""
-                                     [
-                                     ]]
+                                     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" "e2"
+                                     [ Movement (Piece White Pawn) (coord "e2") (coord "e3")
+                                     , PawnDoubleMove (Piece White Pawn) (coord "e2") (coord "e4")
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1" "a7"
+                                     [ Movement (Piece Black Pawn) (coord "a7") (coord "a6")
+                                     , PawnDoubleMove (Piece Black Pawn) (coord "a7") (coord "a5")
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 1" "e4"
+                                     [],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 1" "e5"
+                                     [],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPP5/RNBQKBNR w KQkq - 0 1" "f4"
+                                     [ Movement (Piece White Pawn) (coord "f4") (coord "f5")
+                                     , Capture (Piece White Pawn) (coord "f4") (coord "e5")
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPP5/RNBQKBNR w KQkq - 0 1" "e5"
+                                     [ Capture (Piece Black Pawn) (coord "e5") (coord "f4")
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "rnbqkbnr/pppp1p1p/8/4pPp1/4P3/8/PPPP2PP/RNBQKBNR w KQkq - 0 4" "f5"
+                                     [ Movement (Piece White Pawn) (coord "f5") (coord "f6")
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "rnbqkbnr/ppp1p1pp/8/3pPp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 3" "e5"
+                                     [ Movement (Piece White Pawn) (coord "e5") (coord "e6")
+                                     , EnPassant (Piece White Pawn) (coord "e5") (coord "f6")
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "rnbqkbnr/ppp1pppp/8/8/2PpPP2/8/PP1P2PP/RNBQKBNR b KQkq c3 0 3" "d4"
+                                     [ Movement (Piece Black Pawn) (coord "d4") (coord "d3")
+                                     , EnPassant (Piece Black Pawn) (coord "d4") (coord "c3")
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "rnbqkbnr/1pppp3/p5pp/3PPp2/8/8/PPP2PPP/RNBQKBNR w KQkq f6 0 5" "d5"
+                                     [ Movement (Piece White Pawn) (coord "d5") (coord "d6")
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "1r5k/2P5/8/8/8/8/8/4K2N w - - 0 1" "c7"
+                                     [ Promotion (Piece White Pawn) (coord "c7") (coord "c8") Rook
+                                     , Promotion (Piece White Pawn) (coord "c7") (coord "c8") Knight
+                                     , Promotion (Piece White Pawn) (coord "c7") (coord "c8") Bishop
+                                     , Promotion (Piece White Pawn) (coord "c7") (coord "c8") Queen
+                                     , Promotion (Piece White Pawn) (coord "c7") (coord "b8") Rook
+                                     , Promotion (Piece White Pawn) (coord "c7") (coord "b8") Knight
+                                     , Promotion (Piece White Pawn) (coord "c7") (coord "b8") Bishop
+                                     , Promotion (Piece White Pawn) (coord "c7") (coord "b8") Queen
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "k7/8/8/8/8/8/p7/1N2K3 w - - 0 1" "a2"
+                                     [ Promotion (Piece Black Pawn) (coord "a2") (coord "a1") Rook
+                                     , Promotion (Piece Black Pawn) (coord "a2") (coord "a1") Knight
+                                     , Promotion (Piece Black Pawn) (coord "a2") (coord "a1") Bishop
+                                     , Promotion (Piece Black Pawn) (coord "a2") (coord "a1") Queen
+                                     , Promotion (Piece Black Pawn) (coord "a2") (coord "b1") Rook
+                                     , Promotion (Piece Black Pawn) (coord "a2") (coord "b1") Knight
+                                     , Promotion (Piece Black Pawn) (coord "a2") (coord "b1") Bishop
+                                     , Promotion (Piece Black Pawn) (coord "a2") (coord "b1") Queen
+                                     ],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "k7/8/8/8/8/8/p7/N3K3 w - - 0 1" "a2"
+                                     [],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "k7/8/8/8/8/4b3/4P3/K7 w - - 0 1" "e2"
+                                     [],
+                                     testGeneratingMoves generateAllPawnMoves
+                                     "6k1/8/8/8/8/3P4/8/4K3 w - - 0 1" "d3"
+                                     [ Movement (Piece White Pawn) (coord "d3") (coord "d4")
+                                     ]
+                                     ]
 
 testGeneratingMoves :: (GameState -> Coordinates -> [Move]) -> String -> String -> [Move] -> Test
 testGeneratingMoves func fen square moves = TestList [

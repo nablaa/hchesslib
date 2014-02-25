@@ -99,7 +99,46 @@ generateAllKingMoves game coords = map (\coordinate -> Movement piece coords coo
               captureSquares = kingCaptureSquares game coords
 
 generateAllPawnMoves :: GameState -> Coordinates -> [Move]
-generateAllPawnMoves game coords = []
+generateAllPawnMoves game coords@(row, _) = move ++ doubleMove ++ captures ++ promotions ++ enpassant
+        where board = stateBoard game
+              (Piece player _) = fromJust $ getPiece board coords
+              isOnStartRow = case player of
+                                     White -> row == 6
+                                     Black -> row == 1
+              isNextToPromotionRow = case player of
+                                             White -> row == 1
+                                             Black -> row == 6
+              moveDirection = case player of
+                              White -> -1
+                              Black -> 1
+              moveSquare = squareDiff coords (moveDirection, 0)
+              doubleMoveSquare = squareDiff coords (moveDirection * 2, 0)
+              captureSquares = map (squareDiff coords) [(moveDirection, -1), (moveDirection, 1)]
+              move = if isEmpty board moveSquare && not isNextToPromotionRow
+                     then [Movement (Piece player Pawn) coords moveSquare]
+                     else []
+              doubleMove = if isEmpty board moveSquare && isEmpty board doubleMoveSquare && isOnStartRow
+                           then [PawnDoubleMove (Piece player Pawn) coords doubleMoveSquare]
+                           else []
+              capture square = if isOpponentSquare board square player && not isNextToPromotionRow
+                               then [Capture (Piece player Pawn) coords square]
+                               else []
+              captures = concatMap capture captureSquares
+              promotionCapture square = if isOpponentSquare board square player
+                                        then map (Promotion (Piece player Pawn) coords square) [Rook, Bishop, Knight, Queen]
+                                        else []
+              promotionMove square = if isEmpty board square
+                                     then map (Promotion (Piece player Pawn) coords square) [Rook, Bishop, Knight, Queen]
+                                     else []
+              promotions = if isNextToPromotionRow
+                           then concatMap promotionCapture captureSquares ++ promotionMove moveSquare
+                           else []
+              epSquare = enPassantSquare game
+              enpassant = case epSquare of
+                                  Just square -> if square `elem` captureSquares
+                                                 then [EnPassant (Piece player Pawn) coords square]
+                                                 else []
+                                  Nothing -> []
 
 kingMoveSquares :: GameState -> Coordinates -> [Coordinates]
 kingMoveSquares game start = emptySquares
