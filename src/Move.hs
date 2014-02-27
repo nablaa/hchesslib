@@ -6,7 +6,7 @@ module Move (GameState(..), Move(..), CastlingType(..),
              iterateDirection, generateAllBishopMoves,
              generateAllQueenMoves, generateAllKnightMoves,
              generateAllKingMoves, generateAllPawnMoves,
-             )  where
+             generateAllPotentialMoves)  where
 
 import Piece
 import Board
@@ -205,3 +205,20 @@ iterateCaptureSquares game start direction = case squaresNotEmpty of
 iterateDirection :: (GameState -> Coordinates -> Bool) -> GameState -> Coordinates -> (Int, Int) -> [Coordinates]
 iterateDirection condition game start direction = takeWhile (condition game) squares
         where squares = iterateDirectionInsideBoard start direction
+
+generateAllPotentialMoves :: GameState -> [Move]
+generateAllPotentialMoves game = concatMap (generateSquareMoves game) squares
+        where player = currentPlayer game
+              board = stateBoard game
+              squares = getSquaresWithOwner board player
+
+generateSquareMoves :: GameState -> Coordinates -> [Move]
+generateSquareMoves game coordinates = case getPiece board coordinates of
+                                               Nothing -> []
+                                               Just (Piece _ Pawn) -> generateAllPawnMoves game coordinates
+                                               Just (Piece _ Rook) -> generateAllRookMoves game coordinates
+                                               Just (Piece _ Bishop) -> generateAllBishopMoves game coordinates
+                                               Just (Piece _ Queen) -> generateAllQueenMoves game coordinates
+                                               Just (Piece _ King) -> generateAllKingMoves game coordinates
+                                               Just (Piece _ Knight) -> generateAllKnightMoves game coordinates
+        where board = stateBoard game

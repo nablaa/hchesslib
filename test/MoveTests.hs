@@ -275,6 +275,27 @@ generateAllPawnMovesTests = TestList [testGeneratingMoves generateAllPawnMoves
                                      ]
                                      ]
 
+generateAllPotentialMovesTests :: Test
+generateAllPotentialMovesTests = TestList [
+        S.fromList [
+                  Movement (Piece White Pawn) (coord "g2") (coord "g3")
+                , Movement (Piece White Pawn) (coord "h3") (coord "h4")
+                , Capture (Piece White Pawn) (coord "h3") (coord "g4")
+                , Movement (Piece White King) (coord "h2") (coord "g3")
+                , Movement (Piece White King) (coord "h2") (coord "h1")
+                , Movement (Piece White King) (coord "h2") (coord "g1")
+                ] ~=? S.fromList (generateAllPotentialMoves (game "8/k7/8/8/6p1/7P/6PK/8 w - - 0 1"))
+        , S.fromList [
+                  Capture (Piece Black Pawn) (coord "g4") (coord "h3")
+                , Movement (Piece Black Pawn) (coord "g4") (coord "g3")
+                , Movement (Piece Black King) (coord "a7") (coord "a8")
+                , Movement (Piece Black King) (coord "a7") (coord "a6")
+                , Movement (Piece Black King) (coord "a7") (coord "b8")
+                , Movement (Piece Black King) (coord "a7") (coord "b7")
+                , Movement (Piece Black King) (coord "a7") (coord "b6")
+                ] ~=? S.fromList (generateAllPotentialMoves (game "8/k7/8/8/6p1/7P/6PK/8 b - - 0 1"))
+        ]
+
 testGeneratingMoves :: (GameState -> Coordinates -> [Move]) -> String -> String -> [Move] -> Test
 testGeneratingMoves func fen square moves = TestList [
           TestLabel ("Correct move count for: '" ++ fen ++ "' => " ++ square) (length moves ~=? length generated)
@@ -285,4 +306,5 @@ testGeneratingMoves func fen square moves = TestList [
 moveTests :: Test
 moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests,
                       generateAllRookMovesTests, generateAllBishopMovesTests, generateAllQueenMovesTests,
-                      generateAllKnightMovesTests, generateAllKingMovesTests, generateAllPawnMovesTests]
+                      generateAllKnightMovesTests, generateAllKingMovesTests, generateAllPawnMovesTests,
+                      generateAllPotentialMovesTests]
