@@ -3,7 +3,8 @@ module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               parseBoardCompact, printCoordinate, isEmpty, isOpponentSquare,
               firstPieceInSquareList, iterateDirectionInsideBoard,
               getKingSquare, rookPattern, bishopPattern, knightPattern,
-              queenPattern, isSquareThreatened, sumSquares) where
+              queenPattern, isSquareThreatened, sumSquares,
+              isCheck) where
 
 import Data.Array
 import Data.Char
@@ -163,3 +164,7 @@ isSquareThreatened board opponentPlayer coords = knightsThreaten || pawnsThreate
               potentialOpponentBishopQueenPieces = catMaybes $ map (firstPieceInSquareList board . iterateDirectionInsideBoard coords) bishopPattern
               bishopOrQueenThreatens = any isOpponentBishopOrQueen potentialOpponentBishopQueenPieces
               isOpponentBishopOrQueen (Piece color piecetype) = color == opponentPlayer && piecetype `elem` [Bishop, Queen]
+
+isCheck :: Board -> Color -> Bool
+isCheck board player = isSquareThreatened board (opponent player) kingSquare
+        where kingSquare = getKingSquare board player

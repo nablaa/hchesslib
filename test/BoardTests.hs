@@ -148,10 +148,24 @@ isSquareThreatenedTest = TestList [
         , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "c4")
         ]
 
+isCheckTest :: Test
+isCheckTest = TestList [
+          False ~=? isCheck initialBoard White
+        , False ~=? isCheck initialBoard Black
+        , True ~=? isCheck (fenBoard "rnbqkbnr/pppp2pp/5p2/4p2Q/4P3/3P4/PPP2PPP/RNB1KBNR b KQkq - 1 3") Black
+        , False ~=? isCheck (fenBoard "rnbqkbnr/pppp2pp/5p2/4p2Q/4P3/3P4/PPP2PPP/RNB1KBNR b KQkq - 1 3") White
+        , True ~=? isCheck (fenBoard "rnbqk2r/pppp2bp/3N2pn/4pp1Q/4P3/3P4/PPP2PPP/RNB1KB1R b KQkq - 1 7") Black
+        , True ~=? isCheck (fenBoard "rnbq3r/pppp2bp/3Nk1pn/3Ppp1Q/4P3/8/PPP2PPP/RNB1KB1R b KQ - 0 9") Black
+        , False ~=? isCheck (fenBoard "8/5r2/4K1q1/4p3/3k4/8/8/8 w - - 0 7") Black
+        , True ~=? isCheck (fenBoard "8/5r2/4K1q1/4p3/3k4/8/8/8 w - - 0 7") White
+        , True ~=? isCheck (fenBoard "r3k2r/ppp2p1p/2n1p1p1/8/2B2P1q/2NPb1n1/PP4PP/R2Q3K w kq - 0 8") White
+        ]
+
 boardTests :: Test
 boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        getPieceTest, movePieceTest, parsingBoardCompactTest,
                        isEmptyTest, isOpponentSquareTest,
                        firstPieceInSquareListTest,
                        iterateDirectionInsideBoardTest,
-                       getKingSquareTest, isSquareThreatenedTest]
+                       getKingSquareTest, isSquareThreatenedTest,
+                       isCheckTest]
