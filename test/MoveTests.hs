@@ -282,36 +282,7 @@ testGeneratingMoves func fen square moves = TestList [
         ]
         where generated = func (game fen) (coord square)
 
-isSquareThreatenedTests :: Test
-isSquareThreatenedTests = TestList [
-          False ~=? isSquareThreatened initialState Black (coord "e1")
-        , False ~=? isSquareThreatened initialState Black (coord "e4")
-        , True ~=? isSquareThreatened initialState White (coord "e1")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "c6")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "h5")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g2")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "d8")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "e5")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "f1")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "h1")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g5")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g8")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "d5")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "b4")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g4")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "f4")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "b1")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "f4")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "d8")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "d8")
-        , True ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "f1")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "h6")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "b5")
-        , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "c4")
-        ]
-
 moveTests :: Test
 moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests,
                       generateAllRookMovesTests, generateAllBishopMovesTests, generateAllQueenMovesTests,
-                      generateAllKnightMovesTests, generateAllKingMovesTests, generateAllPawnMovesTests,
-                      isSquareThreatenedTests]
+                      generateAllKnightMovesTests, generateAllKingMovesTests, generateAllPawnMovesTests]

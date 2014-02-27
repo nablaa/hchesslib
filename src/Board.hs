@@ -2,7 +2,8 @@ module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               parseCoordinate, isInsideBoard, getPiece, movePiece,
               parseBoardCompact, printCoordinate, isEmpty, isOpponentSquare,
               firstPieceInSquareList, iterateDirectionInsideBoard,
-              getKingSquare) where
+              getKingSquare, rookPattern, bishopPattern, knightPattern,
+              queenPattern, isSquareThreatened, sumSquares) where
 
 import Data.Array
 import Data.Char
@@ -115,9 +116,50 @@ firstPieceInSquareList board coordinates = case firstNonEmpty of
 
 iterateDirectionInsideBoard :: Coordinates -> (Int, Int) -> [Coordinates]
 iterateDirectionInsideBoard start direction = tail $ takeWhile isInsideBoard $ iterate (sumSquares direction) start
-        where sumSquares (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+
+sumSquares :: (Int, Int) -> (Int, Int) -> (Int, Int)
+sumSquares (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
 
 getKingSquare :: Board -> Color -> Coordinates
 getKingSquare board player = fromJust $ rlookup (Square (Piece player King)) $ assocs board
         where rlookup x = lookup x . map swap
               swap (x, y) = (y, x)
+
+rookPattern :: [(Int, Int)]
+rookPattern = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+bishopPattern :: [(Int, Int)]
+bishopPattern = [(-1, -1), (-1, 1), (1, -1), (1, 1)]
+
+queenPattern :: [(Int, Int)]
+queenPattern = rookPattern ++ bishopPattern
+
+knightPattern :: [(Int, Int)]
+knightPattern = [(-2, -1), (-1, -2), (1, -2), (2, -1), (-2, 1), (-1, 2), (1, 2), (2, 1)]
+
+isSquareThreatened :: Board -> Color -> Coordinates -> Bool
+isSquareThreatened board opponentPlayer coords = knightsThreaten || pawnsThreaten || otherPiecesThreaten || kingsThreaten || rookOrQueenThreatens || bishopOrQueenThreatens
+        where knightSquares = map (sumSquares coords) knightPattern
+              knightsThreaten = any isOpponentKnight knightSquares
+              isOpponentKnight square = case getPiece board square of
+                                                Just (Piece player Knight) -> player == opponentPlayer
+                                                _ -> False
+              pawnsThreaten = any isOpponentPawn $ map (sumSquares coords) pawnSquares
+              pawnSquares = case opponentPlayer of
+                                    White -> [(1, -1), (1, 1)]
+                                    Black -> [(-1, -1), (-1, 1)]
+              isOpponentPawn square = case getPiece board square of
+                                              Just (Piece player Pawn) -> player == opponentPlayer
+                                              _ -> False
+              otherPiecesThreaten = False
+              kingSquares = map (sumSquares coords) queenPattern
+              kingsThreaten = any isOpponentKing kingSquares
+              isOpponentKing square  = case getPiece board square of
+                                                Just (Piece player King) -> player == opponentPlayer
+                                                _ -> False
+              potentialOpponentRookQueenPieces = catMaybes $ map (firstPieceInSquareList board . iterateDirectionInsideBoard coords) rookPattern
+              rookOrQueenThreatens = any isOpponentRookOrQueen potentialOpponentRookQueenPieces
+              isOpponentRookOrQueen (Piece color piecetype) = color == opponentPlayer && piecetype `elem` [Rook, Queen]
+              potentialOpponentBishopQueenPieces = catMaybes $ map (firstPieceInSquareList board . iterateDirectionInsideBoard coords) bishopPattern
+              bishopOrQueenThreatens = any isOpponentBishopOrQueen potentialOpponentBishopQueenPieces
+              isOpponentBishopOrQueen (Piece color piecetype) = color == opponentPlayer && piecetype `elem` [Bishop, Queen]

@@ -120,10 +120,38 @@ getKingSquareTest = TestList [
         , coord "e8" ~=? getKingSquare initialBoard Black
         ]
 
+isSquareThreatenedTest :: Test
+isSquareThreatenedTest = TestList [
+          False ~=? isSquareThreatened initialBoard Black (coord "e1")
+        , False ~=? isSquareThreatened initialBoard Black (coord "e4")
+        , True ~=? isSquareThreatened initialBoard White (coord "e1")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "c6")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "h5")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g2")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "d8")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "e5")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "f1")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "h1")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g5")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g8")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "d5")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "b4")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g4")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "f4")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "b1")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "f4")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "d8")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "d8")
+        , True ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "f1")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "h6")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "b5")
+        , False ~=? isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "c4")
+        ]
+
 boardTests :: Test
 boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        getPieceTest, movePieceTest, parsingBoardCompactTest,
                        isEmptyTest, isOpponentSquareTest,
                        firstPieceInSquareListTest,
                        iterateDirectionInsideBoardTest,
-                       getKingSquareTest]
+                       getKingSquareTest, isSquareThreatenedTest]

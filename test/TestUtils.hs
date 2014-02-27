@@ -1,4 +1,4 @@
-module TestUtils (coord, game) where
+module TestUtils (coord, game, fenBoard) where
 
 import Board
 import Move
@@ -10,3 +10,6 @@ coord = fromJust . parseCoordinate
 
 game :: String -> GameState
 game = fromJust . readFEN
+
+fenBoard :: String -> Board
+fenBoard = stateBoard . fromJust . readFEN
