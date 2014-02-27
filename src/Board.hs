@@ -4,7 +4,7 @@ module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               firstPieceInSquareList, iterateDirectionInsideBoard,
               getKingSquare, rookPattern, bishopPattern, knightPattern,
               queenPattern, isSquareThreatened, sumSquares,
-              isCheck) where
+              isCheck, getSquaresWithOwner) where
 
 import Data.Array
 import Data.Char
@@ -87,10 +87,13 @@ getPiece _ _ = Nothing
 isEmpty :: Board -> Coordinates -> Bool
 isEmpty board coordinates = isNothing $ getPiece board coordinates
 
+isPlayerSquare :: Board -> Color -> Coordinates -> Bool
+isPlayerSquare board player coordinates = case getPiece board coordinates of
+                                                  Nothing -> False
+                                                  Just (Piece color _) -> color == player
+
 isOpponentSquare :: Board -> Coordinates -> Color -> Bool
-isOpponentSquare board coordinates player = case getPiece board coordinates of
-                                                    Nothing -> False
-                                                    Just (Piece color _) -> color == opponent player
+isOpponentSquare board coordinates player = isPlayerSquare board (opponent player) coordinates
 
 parseBoardCompact :: String -> Maybe Board
 parseBoardCompact str | length str /= 72 = Nothing
@@ -168,3 +171,6 @@ isSquareThreatened board opponentPlayer coords = knightsThreaten || pawnsThreate
 isCheck :: Board -> Color -> Bool
 isCheck board player = isSquareThreatened board (opponent player) kingSquare
         where kingSquare = getKingSquare board player
+
+getSquaresWithOwner :: Board -> Color -> [Coordinates]
+getSquaresWithOwner board player = filter (isPlayerSquare board player) (indices board)

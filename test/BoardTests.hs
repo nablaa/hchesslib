@@ -5,6 +5,7 @@ import Board
 import Test.HUnit
 import Data.Maybe
 import TestUtils
+import qualified Data.Set as S
 
 boardPrintingTests :: Test
 boardPrintingTests = TestList [
@@ -161,6 +162,12 @@ isCheckTest = TestList [
         , True ~=? isCheck (fenBoard "r3k2r/ppp2p1p/2n1p1p1/8/2B2P1q/2NPb1n1/PP4PP/R2Q3K w kq - 0 8") White
         ]
 
+getSquaresWithOwnerTest :: Test
+getSquaresWithOwnerTest = TestList [
+          S.fromList [coord "a7", coord "g4"] ~=? S.fromList (getSquaresWithOwner (fenBoard "8/k7/8/8/6p1/7P/6PK/8 w - - 0 1") Black)
+        , S.fromList [coord "g2", coord "h2", coord "h3"] ~=? S.fromList (getSquaresWithOwner (fenBoard "8/k7/8/8/6p1/7P/6PK/8 w - - 0 1") White)
+        ]
+
 boardTests :: Test
 boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        getPieceTest, movePieceTest, parsingBoardCompactTest,
@@ -168,4 +175,4 @@ boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        firstPieceInSquareListTest,
                        iterateDirectionInsideBoardTest,
                        getKingSquareTest, isSquareThreatenedTest,
-                       isCheckTest]
+                       isCheckTest, getSquaresWithOwnerTest]
