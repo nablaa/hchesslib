@@ -1,7 +1,8 @@
 module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               parseCoordinate, isInsideBoard, getPiece, movePiece,
               parseBoardCompact, printCoordinate, isEmpty, isOpponentSquare,
-              firstPieceInSquareList, iterateDirectionInsideBoard) where
+              firstPieceInSquareList, iterateDirectionInsideBoard,
+              getKingSquare) where
 
 import Data.Array
 import Data.Char
@@ -115,3 +116,8 @@ firstPieceInSquareList board coordinates = case firstNonEmpty of
 iterateDirectionInsideBoard :: Coordinates -> (Int, Int) -> [Coordinates]
 iterateDirectionInsideBoard start direction = tail $ takeWhile isInsideBoard $ iterate (sumSquares direction) start
         where sumSquares (x1, y1) (x2, y2) = (x1 + x2, y1 + y2)
+
+getKingSquare :: Board -> Color -> Coordinates
+getKingSquare board player = fromJust $ rlookup (Square (Piece player King)) $ assocs board
+        where rlookup x = lookup x . map swap
+              swap (x, y) = (y, x)

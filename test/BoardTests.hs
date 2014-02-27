@@ -4,6 +4,7 @@ import Piece
 import Board
 import Test.HUnit
 import Data.Maybe
+import TestUtils
 
 boardPrintingTests :: Test
 boardPrintingTests = TestList [
@@ -113,9 +114,16 @@ iterateDirectionInsideBoardTest = TestList [
         , [] ~=? iterateDirectionInsideBoard (4, 0) (0, -1)
         ]
 
+getKingSquareTest :: Test
+getKingSquareTest = TestList [
+          coord "e1" ~=? getKingSquare initialBoard White
+        , coord "e8" ~=? getKingSquare initialBoard Black
+        ]
+
 boardTests :: Test
 boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        getPieceTest, movePieceTest, parsingBoardCompactTest,
                        isEmptyTest, isOpponentSquareTest,
                        firstPieceInSquareListTest,
-                       iterateDirectionInsideBoardTest]
+                       iterateDirectionInsideBoardTest,
+                       getKingSquareTest]

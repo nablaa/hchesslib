@@ -3,10 +3,9 @@ module MoveTests where
 import Piece
 import Board
 import Move
-import FEN
-import Data.Maybe
 import qualified Data.Set as S
 import Test.HUnit
+import TestUtils
 
 isCorrectStartPieceTests :: Test
 isCorrectStartPieceTests = TestList [
@@ -310,13 +309,6 @@ isSquareThreatenedTests = TestList [
         , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "b5")
         , False ~=? isSquareThreatened (game "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "c4")
         ]
-
-coord :: String -> Coordinates
-coord = fromJust . parseCoordinate
-
-game :: String -> GameState
-game = fromJust . readFEN
-
 
 moveTests :: Test
 moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests,
