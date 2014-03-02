@@ -10,27 +10,27 @@ import Data.Maybe
 
 isCorrectStartPieceTests :: Test
 isCorrectStartPieceTests = TestList [
-          Nothing ~=? isCorrectStartPiece initialBoard (Piece White Pawn) (coord "e2")
-        , Nothing ~=? isCorrectStartPiece initialBoard (Piece White Knight) (coord "b1")
-        , Just WrongPiece ~=? isCorrectStartPiece initialBoard (Piece Black Pawn) (coord "e2")
-        , Just WrongPiece ~=? isCorrectStartPiece initialBoard (Piece White Bishop) (coord "e2")
-        , Just WrongPiece ~=? isCorrectStartPiece initialBoard (Piece White Pawn) (coord "e3")
+          True ~=? isCorrectStartPiece initialBoard (Piece White Pawn) (coord "e2")
+        , True ~=? isCorrectStartPiece initialBoard (Piece White Knight) (coord "b1")
+        , False ~=? isCorrectStartPiece initialBoard (Piece Black Pawn) (coord "e2")
+        , False ~=? isCorrectStartPiece initialBoard (Piece White Bishop) (coord "e2")
+        , False ~=? isCorrectStartPiece initialBoard (Piece White Pawn) (coord "e3")
         ]
 
 isRightPlayerMoveTests :: Test
 isRightPlayerMoveTests = TestList [
-          Nothing ~=? isRightPlayerMove White (Movement (Piece White Pawn) (coord "e2") (coord "e3"))
-        , Just WrongPlayer ~=? isRightPlayerMove White (Movement (Piece Black Pawn) (coord "e7") (coord "e6"))
-        , Nothing ~=? isRightPlayerMove Black (Capture (Piece Black Queen) (coord "a1") (coord "a2"))
-        , Just WrongPlayer ~=? isRightPlayerMove Black (Capture (Piece White Queen) (coord "a1") (coord "a2"))
-        , Nothing ~=? isRightPlayerMove White (Castling White Short)
-        , Just WrongPlayer ~=? isRightPlayerMove Black (Castling White Long)
-        , Nothing ~=? isRightPlayerMove White (EnPassant (Piece White Pawn) (coord "e2") (coord "d3"))
-        , Just WrongPlayer ~=? isRightPlayerMove Black (EnPassant (Piece White Pawn) (coord "e2") (coord "d3"))
-        , Nothing ~=? isRightPlayerMove Black (Promotion (Piece Black Pawn) (coord "e2") (coord "e1") Queen)
-        , Just WrongPlayer ~=? isRightPlayerMove White (Promotion (Piece Black Pawn) (coord "e2") (coord "e1") Queen)
-        , Nothing ~=? isRightPlayerMove White (PawnDoubleMove (Piece White Pawn) (coord "e2") (coord "e3"))
-        , Just WrongPlayer ~=? isRightPlayerMove Black (PawnDoubleMove (Piece White Pawn) (coord "e2") (coord "e3"))
+          True ~=? isRightPlayerMove White (Movement (Piece White Pawn) (coord "e2") (coord "e3"))
+        , False ~=? isRightPlayerMove White (Movement (Piece Black Pawn) (coord "e7") (coord "e6"))
+        , True ~=? isRightPlayerMove Black (Capture (Piece Black Queen) (coord "a1") (coord "a2"))
+        , False ~=? isRightPlayerMove Black (Capture (Piece White Queen) (coord "a1") (coord "a2"))
+        , True ~=? isRightPlayerMove White (Castling White Short)
+        , False ~=? isRightPlayerMove Black (Castling White Long)
+        , True ~=? isRightPlayerMove White (EnPassant (Piece White Pawn) (coord "e2") (coord "d3"))
+        , False ~=? isRightPlayerMove Black (EnPassant (Piece White Pawn) (coord "e2") (coord "d3"))
+        , True ~=? isRightPlayerMove Black (Promotion (Piece Black Pawn) (coord "e2") (coord "e1") Queen)
+        , False ~=? isRightPlayerMove White (Promotion (Piece Black Pawn) (coord "e2") (coord "e1") Queen)
+        , True ~=? isRightPlayerMove White (PawnDoubleMove (Piece White Pawn) (coord "e2") (coord "e3"))
+        , False ~=? isRightPlayerMove Black (PawnDoubleMove (Piece White Pawn) (coord "e2") (coord "e3"))
         ]
 
 areCoordinatesValidTests :: Test
@@ -322,9 +322,24 @@ boardMoveTest move fenBefore fenAfter = boardAfter ~=? fromJust (boardAfterMove 
         where boardAfter = fenBoard fenAfter
               boardBefore = fenBoard fenBefore
 
+generateAllMovesTests :: Test
+generateAllMovesTests = TestList [
+        -- Checkmates
+          [] ~=? generateAllMoves (game "8/5r2/4K1q1/4p3/3k4/8/8/8 w - - 0 7")
+        , [] ~=? generateAllMoves (game "4r2r/p6p/1pnN2p1/kQp5/3pPq2/3P4/PPP3PP/R5K1 b - - 0 2")
+        , [] ~=? generateAllMoves (game "r3k2r/ppp2p1p/2n1p1p1/8/2B2P1q/2NPb1n1/PP4PP/R2Q3K w kq - 0 8")
+        , [] ~=? generateAllMoves (game "8/6R1/pp1r3p/6p1/P3R1Pk/1P4P1/7K/8 b - - 0 4")
+
+        -- Stalemates
+        , [] ~=? generateAllMoves (game "1R6/8/8/8/8/8/7R/k6K b - - 0 1")
+        , [] ~=? generateAllMoves (game "8/8/5k2/p4p1p/P4K1P/1r6/8/8 w - - 0 2")
+
+        , [Movement (Piece Black King) (0,4) (1,4),
+           Capture (Piece Black King) (0,4) (1,5)] ~=? generateAllMoves (game "rnbqkb1r/pp1p1Bpp/5n2/2p1p3/4P3/2P5/PP1P1PPP/RNBQK1NR b KQkq - 0 4")
+        ]
 
 moveTests :: Test
 moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests,
                       generateAllRookMovesTests, generateAllBishopMovesTests, generateAllQueenMovesTests,
                       generateAllKnightMovesTests, generateAllKingMovesTests, generateAllPawnMovesTests,
-                      generateAllPotentialMovesTests, boardAfterMoveTests]
+                      generateAllPotentialMovesTests, boardAfterMoveTests, generateAllMovesTests]

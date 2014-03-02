@@ -1,12 +1,13 @@
 module Move (GameState(..), Move(..), CastlingType(..),
              MoveError(..), isRightPlayerMove,
-             isLegalMove, applyMove, initialState,
+             isMoveError, applyMove, initialState,
              isCorrectStartPiece, areCoordinatesValid,
              generateAllRookMoves, iterateMovementSquares,
              iterateDirection, generateAllBishopMoves,
              generateAllQueenMoves, generateAllKnightMoves,
              generateAllKingMoves, generateAllPawnMoves,
-             generateAllPotentialMoves, boardAfterMove)  where
+             generateAllPotentialMoves, boardAfterMove,
+             generateAllMoves)  where
 
 import Piece
 import Board
@@ -33,38 +34,62 @@ data Move = Movement Piece Coordinates Coordinates
 data CastlingType = Short | Long
                   deriving (Show, Eq, Ord)
 
-data MoveError = WrongPlayer | WrongPiece | InvalidCoordinates
+data MoveError = WrongPlayer | WrongPiece | InvalidMove | InCheck | InvalidCoordinates
                deriving (Show, Eq)
 
 initialState :: GameState
 initialState = State initialBoard White [Short, Long] [Short, Long] Nothing 0 1
 
-isLegalMove :: GameState -> Move -> Bool
-isLegalMove = undefined
+generateAllMoves :: GameState -> [Move]
+generateAllMoves game = filter isLegalMove $ generateAllPotentialMoves game
+        where isLegalMove move = isMoveError game move == Nothing
+
+isInCheckAfterMove :: GameState -> Move -> Bool
+isInCheckAfterMove game move = case newBoard of
+                                       Nothing -> False
+                                       Just b -> isCheck b (currentPlayer game)
+        where board = stateBoard game
+              newBoard = boardAfterMove board move
+
+isCorrectPiece :: GameState -> Move -> Bool
+isCorrectPiece (State board _ _ _ _ _ _) (Movement piece start _) = isCorrectStartPiece board piece start
+isCorrectPiece (State board _ _ _ _ _ _) (Capture piece start _) = isCorrectStartPiece board piece start
+isCorrectPiece (State board _ _ _ _ _ _) (EnPassant piece start _) = isCorrectStartPiece board piece start
+isCorrectPiece (State board _ _ _ _ _ _) (Promotion piece start _ _) = isCorrectStartPiece board piece start
+isCorrectPiece (State board _ _ _ _ _ _) (PawnDoubleMove piece start _) = isCorrectStartPiece board piece start
+isCorrectPiece _ (Castling _ _) = True
+
+isMoveError :: GameState -> Move -> Maybe MoveError
+isMoveError game move | not (isCorrectPlayer game move) = Just WrongPlayer
+                      | not (isCorrectPiece game move) = Just WrongPiece
+                      | not (isCorrectBoardMove game move) = Just InvalidCoordinates
+                      | isInCheckAfterMove game move = Just InCheck
+                      | not (move `elem` generateAllPotentialMoves game) = Just InvalidMove
+                      | otherwise = Nothing
+
+isCorrectBoardMove :: GameState -> Move -> Bool
+isCorrectBoardMove game move = boardAfterMove (stateBoard game) move /= Nothing
 
 applyMove :: GameState -> Move -> Either MoveError GameState
 applyMove = undefined
 
-isCorrectStartPiece :: Board -> Piece -> Coordinates -> Maybe MoveError
+isCorrectStartPiece :: Board -> Piece -> Coordinates -> Bool
 isCorrectStartPiece board (Piece color pieceType) coordinates
         = case boardPiece of
-                  Nothing -> Just WrongPiece
-                  Just (Piece color' pieceType') -> if color == color' && pieceType == pieceType'
-                                                    then Nothing
-                                                    else Just WrongPiece
+                  Nothing -> False
+                  Just (Piece color' pieceType') -> color == color' && pieceType == pieceType'
         where boardPiece = getPiece board coordinates
 
-isRightPlayerMove :: Color -> Move -> Maybe MoveError
-isRightPlayerMove player (Movement (Piece color _) _ _) = rightPlayer player color
-isRightPlayerMove player (Capture (Piece color _) _ _) = rightPlayer player color
-isRightPlayerMove player (Castling color _) = rightPlayer player color
-isRightPlayerMove player (EnPassant (Piece color _) _ _) = rightPlayer player color
-isRightPlayerMove player (Promotion (Piece color _) _ _ _) = rightPlayer player color
-isRightPlayerMove player (PawnDoubleMove (Piece color _) _ _) = rightPlayer player color
+isCorrectPlayer :: GameState -> Move -> Bool
+isCorrectPlayer game move = isRightPlayerMove (currentPlayer game) move
 
-rightPlayer :: Color -> Color -> Maybe MoveError
-rightPlayer player color | player == color = Nothing
-                         | otherwise = Just WrongPlayer
+isRightPlayerMove :: Color -> Move -> Bool
+isRightPlayerMove player (Movement (Piece color _) _ _) = player == color
+isRightPlayerMove player (Capture (Piece color _) _ _) = player == color
+isRightPlayerMove player (Castling color _) = player == color
+isRightPlayerMove player (EnPassant (Piece color _) _ _) = player == color
+isRightPlayerMove player (Promotion (Piece color _) _ _ _) = player == color
+isRightPlayerMove player (PawnDoubleMove (Piece color _) _ _) = player == color
 
 areCoordinatesValid :: Coordinates -> Coordinates -> Maybe MoveError
 areCoordinatesValid start end | start == end = Just InvalidCoordinates
@@ -190,7 +215,7 @@ capturesInDirection game start direction = map (\coordinate -> Capture piece sta
 
 iterateMovementSquares :: GameState -> Coordinates -> (Int, Int) -> [Coordinates]
 iterateMovementSquares game start direction = iterateDirection (isEmptySquare) game start direction
-        where isEmptySquare game coord = isEmpty (stateBoard game) coord
+        where isEmptySquare game' coord = isEmpty (stateBoard game') coord
 
 iterateCaptureSquares :: GameState -> Coordinates -> (Int, Int) -> [Coordinates]
 iterateCaptureSquares game start direction = case squaresNotEmpty of
