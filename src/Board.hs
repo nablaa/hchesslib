@@ -4,7 +4,7 @@ module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               firstPieceInSquareList, iterateDirectionInsideBoard,
               getKingSquare, rookPattern, bishopPattern, knightPattern,
               queenPattern, isSquareThreatened, sumSquares,
-              isCheck, getSquaresWithOwner) where
+              isCheck, getSquaresWithOwner, addPiece, removePiece) where
 
 import Data.Array
 import Data.Char
@@ -61,9 +61,9 @@ parseCoordinate _ = Nothing
 printCoordinate :: Coordinates -> String
 printCoordinate (r, c) = [chr (ord 'a' + c), intToDigit (8 - r)]
 
-movePiece :: Board -> Coordinates -> Coordinates -> Maybe Board
-movePiece _ start end | not (isInsideBoard start) || not (isInsideBoard end) = Nothing
-movePiece board start end = case startPiece of
+movePiece :: Coordinates -> Coordinates -> Board -> Maybe Board
+movePiece start end _ | not (isInsideBoard start) || not (isInsideBoard end) = Nothing
+movePiece start end board = case startPiece of
                                     Nothing -> Nothing
                                     Just piece -> Just $ addPiece board' end piece
         where startPiece = getPiece board start

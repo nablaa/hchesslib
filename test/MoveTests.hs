@@ -6,6 +6,7 @@ import Move
 import qualified Data.Set as S
 import Test.HUnit
 import TestUtils
+import Data.Maybe
 
 isCorrectStartPieceTests :: Test
 isCorrectStartPieceTests = TestList [
@@ -303,8 +304,27 @@ testGeneratingMoves func fen square moves = TestList [
         ]
         where generated = func (game fen) (coord square)
 
+boardAfterMoveTests :: Test
+boardAfterMoveTests = TestList [
+          boardMoveTest (PawnDoubleMove (Piece White Pawn) (coord "e2") (coord "e4")) "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1"
+        , boardMoveTest (Movement (Piece White Knight) (coord "g1") (coord "f3")) "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1" "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1"
+        , boardMoveTest (Capture (Piece Black Pawn) (coord "b7") (coord "a6")) "rnbqkbnr/pppp1ppp/B7/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1"  "rnbqkbnr/p1pp1ppp/p7/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1"
+        , boardMoveTest (Castling White Short) "rnbqkbnr/p1pp1ppp/p7/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1" "rnbqkbnr/p1pp1ppp/p7/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 1"
+        , boardMoveTest (PawnDoubleMove (Piece Black Pawn) (coord "c7") (coord "c5")) "rnbqkbnr/p1pp1ppp/p7/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 1" "rnbqkbnr/p2p1ppp/p7/2p1p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq c6 0 2"
+        , boardMoveTest (Capture (Piece White Knight) (coord "f3") (coord "e5")) "rnbqkbnr/p2p1ppp/p7/2p1p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq c6 0 2" "rnbqkbnr/p2p1ppp/p7/2p1N3/4P3/8/PPPP1PPP/RNBQ1RK1 b kq - 0 2"
+        , boardMoveTest (Movement (Piece Black Pawn) (coord "c5") (coord "c4")) "rnbqkbnr/p2p1ppp/p7/2p1N3/4P3/8/PPPP1PPP/RNBQ1RK1 b kq - 0 2" "rnbqkbnr/p2p1ppp/p7/4N3/2p1P3/8/PPPP1PPP/RNBQ1RK1 w kq - 0 3"
+        , boardMoveTest (PawnDoubleMove (Piece White Pawn) (coord "d2") (coord "d4")) "rnbqkbnr/p2p1ppp/p7/4N3/2p1P3/8/PPPP1PPP/RNBQ1RK1 w kq - 0 3" "rnbqkbnr/p2p1ppp/p7/4N3/2pPP3/8/PPP2PPP/RNBQ1RK1 b kq d3 0 3"
+        , boardMoveTest (EnPassant (Piece Black Pawn) (coord "c4") (coord "d3")) "rnbqkbnr/p2p1ppp/p7/4N3/2pPP3/8/PPP2PPP/RNBQ1RK1 b kq d3 0 3" "rnbqkbnr/p2p1ppp/p7/4N3/4P3/3p4/PPP2PPP/RNBQ1RK1 w kq - 0 4"
+        ]
+
+boardMoveTest :: Move -> String -> String -> Test
+boardMoveTest move fenBefore fenAfter = boardAfter ~=? fromJust (boardAfterMove boardBefore move)
+        where boardAfter = fenBoard fenAfter
+              boardBefore = fenBoard fenBefore
+
+
 moveTests :: Test
 moveTests = TestList [isCorrectStartPieceTests, isRightPlayerMoveTests, areCoordinatesValidTests,
                       generateAllRookMovesTests, generateAllBishopMovesTests, generateAllQueenMovesTests,
                       generateAllKnightMovesTests, generateAllKingMovesTests, generateAllPawnMovesTests,
-                      generateAllPotentialMovesTests]
+                      generateAllPotentialMovesTests, boardAfterMoveTests]

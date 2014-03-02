@@ -6,7 +6,7 @@ module Move (GameState(..), Move(..), CastlingType(..),
              iterateDirection, generateAllBishopMoves,
              generateAllQueenMoves, generateAllKnightMoves,
              generateAllKingMoves, generateAllPawnMoves,
-             generateAllPotentialMoves)  where
+             generateAllPotentialMoves, boardAfterMove)  where
 
 import Piece
 import Board
@@ -222,3 +222,20 @@ generateSquareMoves game coordinates = case getPiece board coordinates of
                                                Just (Piece _ King) -> generateAllKingMoves game coordinates
                                                Just (Piece _ Knight) -> generateAllKnightMoves game coordinates
         where board = stateBoard game
+
+boardAfterMove :: Board -> Move -> Maybe Board
+boardAfterMove board (Movement _ from to) = movePiece from to board
+boardAfterMove board (Capture _ from to) = movePiece from to board
+boardAfterMove board (PawnDoubleMove _ from to) = movePiece from to board
+boardAfterMove board (Castling White Long) = movePiece (7, 0) (7, 3) board >>= movePiece (7, 4) (7, 2)
+boardAfterMove board (Castling White Short) = movePiece (7, 7) (7, 5) board >>= movePiece (7, 4) (7, 6)
+boardAfterMove board (Castling Black Long) = movePiece (0, 0) (0, 3) board >>= movePiece (0, 4) (0, 2)
+boardAfterMove board (Castling Black Short) = movePiece (0, 7) (0, 5) board >>= movePiece (0, 4) (0, 6)
+boardAfterMove board (EnPassant (Piece player _) from to@(row, col)) = movePiece from to (removePiece board (epSquare player))
+        where epSquare White = (row + 1, col)
+              epSquare Black = (row - 1, col)
+
+boardAfterMove board (Promotion (Piece player _) from to promotiontype) =
+                case movePiece from to board of
+                        Just newboard -> Just $ addPiece newboard to (Piece player promotiontype)
+                        Nothing -> Nothing

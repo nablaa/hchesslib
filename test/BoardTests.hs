@@ -58,12 +58,12 @@ getPieceTest = TestList [
 
 movePieceTest :: Test
 movePieceTest = TestList [
-          Nothing ~=? movePiece initialBoard (0, 0) (8, 8)
-        , Nothing ~=? movePiece initialBoard (-1, -1) (7, 7)
-        , Nothing ~=? movePiece initialBoard (4, 4) (0, 0)
-        , " nbqkbnr\npppppppp\n        \n        \n    r   \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact (fromJust (movePiece initialBoard (0, 0) (4, 4)))
-        , "rnbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact (fromJust (movePiece initialBoard (0, 0) (0, 0)))
-        , " rbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact (fromJust (movePiece initialBoard (0, 0) (0, 1)))
+          Nothing ~=? movePiece (0, 0) (8, 8) initialBoard
+        , Nothing ~=? movePiece (-1, -1) (7, 7) initialBoard
+        , Nothing ~=? movePiece (4, 4) (0, 0) initialBoard
+        , " nbqkbnr\npppppppp\n        \n        \n    r   \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact (fromJust (movePiece (0, 0) (4, 4) initialBoard))
+        , "rnbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact (fromJust (movePiece (0, 0) (0, 0) initialBoard))
+        , " rbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" ~=? printBoardCompact (fromJust (movePiece (0, 0) (0, 1) initialBoard))
         ]
 
 parsingBoardCompactTest :: Test
