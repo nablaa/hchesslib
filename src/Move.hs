@@ -1,6 +1,6 @@
 module Move (GameState(..), Move(..), CastlingType(..),
              MoveError(..), isRightPlayerMove,
-             isMoveError, applyMove, initialState,
+             isMoveError, initialState,
              isCorrectStartPiece, areCoordinatesValid,
              generateAllRookMoves, iterateMovementSquares,
              iterateDirection, generateAllBishopMoves,
@@ -69,9 +69,6 @@ isMoveError game move | not (isCorrectPlayer game move) = Just WrongPlayer
 
 isCorrectBoardMove :: GameState -> Move -> Bool
 isCorrectBoardMove game move = boardAfterMove (stateBoard game) move /= Nothing
-
-applyMove :: GameState -> Move -> Either MoveError GameState
-applyMove = undefined
 
 isCorrectStartPiece :: Board -> Piece -> Coordinates -> Bool
 isCorrectStartPiece board (Piece color pieceType) coordinates
