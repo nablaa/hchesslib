@@ -1,4 +1,4 @@
-module Game (applyMove, isCheckmate) where
+module Game (applyMove, isCheckmate, isStalemate) where
 
 import Data.List
 import Piece
@@ -71,3 +71,6 @@ updateMoveNumber (State _ Black _ _ _ _ number) = number + 1
 
 isCheckmate :: GameState -> Bool
 isCheckmate game@(State board player _ _ _ _ _) = generateAllMoves game == [] && isCheck board player
+
+isStalemate :: GameState -> Bool
+isStalemate game@(State board player _ _ _ _ _) = generateAllMoves game == [] && not (isCheck board player)

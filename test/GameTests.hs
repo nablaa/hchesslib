@@ -64,6 +64,16 @@ gameSpec = hspec $
               isCheckmate (game "r3k2r/ppp2p1p/2n1p1p1/8/2B2P1q/2NPb1n1/PP4PP/R2Q3K w kq - 0 8") `shouldBe` True
               isCheckmate (game "8/6R1/pp1r3p/6p1/P3R1Pk/1P4P1/7K/8 b - - 0 4") `shouldBe` True
 
+          describe "isStalemate" $ do
+            it "should not consider initial state as stalemate" $ do
+              isStalemate initialState `shouldBe` False
+
+            it "should not consider check a stalemate" $ do
+              isStalemate (game "rnbqkb1r/ppp2ppp/3p1n2/1B2p3/4P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4") `shouldBe` False
+
+            it "should detect stalemate correctly" $ do
+              isStalemate (game "1R6/8/8/8/8/8/7R/k6K b - - 0 1") `shouldBe` True
+              isStalemate (game "8/8/5k2/p4p1p/P4K1P/1r6/8/8 w - - 0 2") `shouldBe` True
 
 testApplyingMove :: String -> Move -> String -> Expectation
 testApplyingMove beforeFen move afterFen = (writeFEN newGame) `shouldBe` afterFen
