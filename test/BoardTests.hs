@@ -168,6 +168,12 @@ getSquaresWithOwnerTest = TestList [
         , S.fromList [coord "g2", coord "h2", coord "h3"] ~=? S.fromList (getSquaresWithOwner (fenBoard "8/k7/8/8/6p1/7P/6PK/8 w - - 0 1") White)
         ]
 
+getPlayerPiecesTest :: Test
+getPlayerPiecesTest = TestList [
+          S.fromList [Bishop, Bishop, Queen, King] ~=? S.fromList (getPlayerPieces (fenBoard "4k3/8/5np1/8/8/2BB4/2Q5/4K3 w - - 0 1") White)
+        , S.fromList [Knight, Pawn, King] ~=? S.fromList (getPlayerPieces (fenBoard "4k3/8/5np1/8/8/2BB4/2Q5/4K3 w - - 0 1") Black)
+        ]
+
 boardTests :: Test
 boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        getPieceTest, movePieceTest, parsingBoardCompactTest,
@@ -175,4 +181,5 @@ boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        firstPieceInSquareListTest,
                        iterateDirectionInsideBoardTest,
                        getKingSquareTest, isSquareThreatenedTest,
-                       isCheckTest, getSquaresWithOwnerTest]
+                       isCheckTest, getSquaresWithOwnerTest,
+                       getPlayerPiecesTest]

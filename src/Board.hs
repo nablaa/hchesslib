@@ -4,7 +4,8 @@ module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
               firstPieceInSquareList, iterateDirectionInsideBoard,
               getKingSquare, rookPattern, bishopPattern, knightPattern,
               queenPattern, isSquareThreatened, sumSquares,
-              isCheck, getSquaresWithOwner, addPiece, removePiece) where
+              isCheck, getSquaresWithOwner, addPiece, removePiece,
+              getPlayerPieces) where
 
 import Data.Array
 import Data.Char
@@ -174,3 +175,7 @@ isCheck board player = isSquareThreatened board (opponent player) kingSquare
 
 getSquaresWithOwner :: Board -> Color -> [Coordinates]
 getSquaresWithOwner board player = filter (isPlayerSquare board player) (indices board)
+
+getPlayerPieces :: Board -> Color -> [PieceType]
+getPlayerPieces board player = map (typeFromPiece . fromJust . getPiece board) (getSquaresWithOwner board player)
+        where typeFromPiece (Piece _ pieceType) = pieceType
