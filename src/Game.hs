@@ -1,4 +1,4 @@
-module Game (applyMove) where
+module Game (applyMove, isCheckmate) where
 
 import Data.List
 import Piece
@@ -68,3 +68,6 @@ updateHalfMoveClock (State _ _ _ _ _ number _) _ = number + 1
 updateMoveNumber :: GameState -> Integer
 updateMoveNumber (State _ White _ _ _ _ number) = number
 updateMoveNumber (State _ Black _ _ _ _ number) = number + 1
+
+isCheckmate :: GameState -> Bool
+isCheckmate game@(State board player _ _ _ _ _) = generateAllMoves game == [] && isCheck board player
