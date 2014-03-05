@@ -10,6 +10,13 @@ import Test.Hspec
 gameSpec :: IO ()
 gameSpec = hspec $
         describe "Game" $ do
+          applyMoveSpec
+          isCheckmateSpec
+          isStalemateSpec
+          isInsufficientMaterialSpec
+
+applyMoveSpec :: Spec
+applyMoveSpec =
           describe "applyMove" $ do
             it "should update board, player and full move counter correctly" $ do
               testApplyingMove "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" (Movement (Piece White Pawn) (coord "e2") (coord "e3")) "rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
@@ -47,6 +54,8 @@ gameSpec = hspec $
             it "should invalidate long castling when queenside rook is captured" $ do
               testApplyingMove "r1b1kbnr/1p1npppp/R2q4/p1pp4/P7/8/1PPPPPPP/1NBQKBNR w Kkq - 4 6" (Capture (Piece White Rook) (coord "a6") (coord "a8")) "R1b1kbnr/1p1npppp/3q4/p1pp4/P7/8/1PPPPPPP/1NBQKBNR b Kk - 0 6"
 
+isCheckmateSpec :: Spec
+isCheckmateSpec =
           describe "isCheckmate" $ do
             it "should not consider initial state as checkmate" $ do
               isCheckmate initialState `shouldBe` False
@@ -64,6 +73,8 @@ gameSpec = hspec $
               isCheckmate (game "r3k2r/ppp2p1p/2n1p1p1/8/2B2P1q/2NPb1n1/PP4PP/R2Q3K w kq - 0 8") `shouldBe` True
               isCheckmate (game "8/6R1/pp1r3p/6p1/P3R1Pk/1P4P1/7K/8 b - - 0 4") `shouldBe` True
 
+isStalemateSpec :: Spec
+isStalemateSpec =
           describe "isStalemate" $ do
             it "should not consider initial state as stalemate" $ do
               isStalemate initialState `shouldBe` False
@@ -75,6 +86,8 @@ gameSpec = hspec $
               isStalemate (game "1R6/8/8/8/8/8/7R/k6K b - - 0 1") `shouldBe` True
               isStalemate (game "8/8/5k2/p4p1p/P4K1P/1r6/8/8 w - - 0 2") `shouldBe` True
 
+isInsufficientMaterialSpec :: Spec
+isInsufficientMaterialSpec =
           describe "isInsufficientMaterial" $ do
             it "should not consider initial state as insufficient material" $ do
               isInsufficientMaterial initialState `shouldBe` False
