@@ -1,4 +1,5 @@
-module Game (applyMove, isCheckmate, isStalemate, isInsufficientMaterial) where
+module Game (applyMove, isCheckmate, isStalemate, isInsufficientMaterial,
+             isDraw) where
 
 import Data.List
 import Piece
@@ -97,3 +98,6 @@ isInsufficientMaterialWithBishops board _ _ = bishopsOnWhite /= bishopsOnBlack
               blackSquaresWithBishops = filter (\x -> getSquareColor x == Black) $ getSquaresWithPieces board Bishop
               bishopsOnWhite = length whiteSquaresWithBishops > 0
               bishopsOnBlack = length blackSquaresWithBishops > 0
+
+isDraw :: GameState -> Bool
+isDraw game = isStalemate game || isInsufficientMaterial game

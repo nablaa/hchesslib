@@ -14,6 +14,7 @@ gameSpec = hspec $
           isCheckmateSpec
           isStalemateSpec
           isInsufficientMaterialSpec
+          isDrawSpec
 
 applyMoveSpec :: Spec
 applyMoveSpec =
@@ -137,6 +138,21 @@ isInsufficientMaterialSpec =
 
             it "should not consider bishop+king vs. bishop+king as insufficient material if both bishops are on different color square" $ do
               isInsufficientMaterial (game "4k3/8/4b3/8/8/8/1B6/4K3 w - - 0 10") `shouldBe` False
+
+isDrawSpec :: Spec
+isDrawSpec =
+                describe "isDraw" $ do
+                  it "should not detect normal game as draw" $ do
+                    isDraw initialState `shouldBe` False
+
+                  it "should not detect checkmate as draw" $ do
+                    isDraw (game "8/5r2/4K1q1/4p3/3k4/8/8/8 w - - 0 7") `shouldBe` False
+
+                  it "should detect stalemate as draw" $ do
+                    isDraw (game "1R6/8/8/8/8/8/7R/k6K b - - 0 1") `shouldBe` True
+
+                  it "should detect insufficient material  as draw" $ do
+                    isDraw (game "4k3/8/8/8/8/8/8/4K3 w - - 0 10") `shouldBe` True
 
 testApplyingMove :: String -> Move -> String -> Expectation
 testApplyingMove beforeFen move afterFen = (writeFEN newGame) `shouldBe` afterFen
