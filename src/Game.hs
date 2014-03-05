@@ -1,5 +1,5 @@
 module Game (applyMove, isCheckmate, isStalemate, isInsufficientMaterial,
-             isDraw) where
+             isDraw, getWinner) where
 
 import Data.List
 import Piece
@@ -101,3 +101,7 @@ isInsufficientMaterialWithBishops board _ _ = bishopsOnWhite /= bishopsOnBlack
 
 isDraw :: GameState -> Bool
 isDraw game = isStalemate game || isInsufficientMaterial game
+
+getWinner :: GameState -> Maybe Color
+getWinner game | isCheckmate game = Just $ opponent $ currentPlayer game
+               | otherwise = Nothing

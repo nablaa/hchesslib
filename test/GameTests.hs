@@ -15,6 +15,7 @@ gameSpec = hspec $
           isStalemateSpec
           isInsufficientMaterialSpec
           isDrawSpec
+          getWinnerSpec
 
 applyMoveSpec :: Spec
 applyMoveSpec =
@@ -157,3 +158,16 @@ isDrawSpec =
 testApplyingMove :: String -> Move -> String -> Expectation
 testApplyingMove beforeFen move afterFen = (writeFEN newGame) `shouldBe` afterFen
         where Right newGame = applyMove (game beforeFen) move
+
+getWinnerSpec :: Spec
+getWinnerSpec =
+                describe "getWinner" $ do
+                  it "should not give winner if there is no checkmate" $ do
+                    getWinner (game "rnbqkb1r/ppp2ppp/3p1n2/1B2p3/4P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4") `shouldBe` Nothing
+
+                  it "should not give winner if the game is draw" $ do
+                    getWinner (game "1R6/8/8/8/8/8/7R/k6K b - - 0 1") `shouldBe` Nothing
+
+                  it "should return correct winner if the game is checkmate" $ do
+                    getWinner (game "8/5r2/4K1q1/4p3/3k4/8/8/8 w - - 0 7") `shouldBe` (Just Black)
+                    getWinner (game "4r2r/p6p/1pnN2p1/kQp5/3pPq2/3P4/PPP3PP/R5K1 b - - 0 2") `shouldBe` (Just White)
