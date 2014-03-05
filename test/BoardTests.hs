@@ -188,6 +188,12 @@ getSquareColorTest = TestList [
         , White ~=? getSquareColor (coord "a8")
         ]
 
+getSquaresWithPiecesTest :: Test
+getSquaresWithPiecesTest = TestList [
+          S.fromList (map coord ["a1", "h1", "a8", "h8"]) ~=? S.fromList (getSquaresWithPieces initialBoard Rook)
+        , S.fromList (map coord ["d1", "d8"]) ~=? S.fromList (getSquaresWithPieces initialBoard Queen)
+        ]
+
 boardTests :: Test
 boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        getPieceTest, movePieceTest, parsingBoardCompactTest,
@@ -196,4 +202,5 @@ boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        iterateDirectionInsideBoardTest,
                        getKingSquareTest, isSquareThreatenedTest,
                        isCheckTest, getSquaresWithOwnerTest,
-                       getPlayerPiecesTest, getSquareColorTest]
+                       getPlayerPiecesTest, getSquareColorTest,
+                       getSquaresWithPiecesTest]
