@@ -1,4 +1,4 @@
-module Game (applyMove, isCheckmate, isStalemate) where
+module Game (applyMove, isCheckmate, isStalemate, isInsufficientMaterial) where
 
 import Data.List
 import Piece
@@ -74,3 +74,26 @@ isCheckmate game@(State board player _ _ _ _ _) = generateAllMoves game == [] &&
 
 isStalemate :: GameState -> Bool
 isStalemate game@(State board player _ _ _ _ _) = generateAllMoves game == [] && not (isCheck board player)
+
+isInsufficientMaterial :: GameState -> Bool
+isInsufficientMaterial game = isInsufficientMaterialByPieces whitePieces blackPieces || isInsufficientMaterialWithBishops board whitePieces blackPieces
+        where board = stateBoard game
+              whitePieces = delete King $ getPlayerPieces board White
+              blackPieces = delete King $ getPlayerPieces board Black
+
+isInsufficientMaterialByPieces :: [PieceType] -> [PieceType] -> Bool
+isInsufficientMaterialByPieces [] [] = True
+isInsufficientMaterialByPieces [Bishop] [] = True
+isInsufficientMaterialByPieces [Knight] [] = True
+isInsufficientMaterialByPieces [] [Bishop] = True
+isInsufficientMaterialByPieces [] [Knight] = True
+isInsufficientMaterialByPieces _ _ = False
+
+isInsufficientMaterialWithBishops :: Board -> [PieceType] -> [PieceType] -> Bool
+isInsufficientMaterialWithBishops _ white black | not (onlyBishops white && onlyBishops black) = False
+        where onlyBishops pieces = filter (/= Bishop) pieces == []
+isInsufficientMaterialWithBishops board _ _ = bishopsOnWhite /= bishopsOnBlack
+        where whiteSquaresWithBishops = filter (\x -> getSquareColor x == White) $ getSquaresWithPieces board Bishop
+              blackSquaresWithBishops = filter (\x -> getSquareColor x == Black) $ getSquaresWithPieces board Bishop
+              bishopsOnWhite = length whiteSquaresWithBishops > 0
+              bishopsOnBlack = length blackSquaresWithBishops > 0

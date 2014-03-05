@@ -75,6 +75,56 @@ gameSpec = hspec $
               isStalemate (game "1R6/8/8/8/8/8/7R/k6K b - - 0 1") `shouldBe` True
               isStalemate (game "8/8/5k2/p4p1p/P4K1P/1r6/8/8 w - - 0 2") `shouldBe` True
 
+          describe "isInsufficientMaterial" $ do
+            it "should not consider initial state as insufficient material" $ do
+              isInsufficientMaterial initialState `shouldBe` False
+
+            it "should not consider queen+king vs. queen+king as insufficient material" $ do
+              isInsufficientMaterial (game "3qk3/8/8/8/8/8/8/3QK3 w - - 0 10") `shouldBe` False
+
+            it "should not consider rook+king vs. king as insufficient material" $ do
+              isInsufficientMaterial (game "4k3/8/8/8/8/8/8/3RK3 w - - 0 10") `shouldBe` False
+              isInsufficientMaterial (game "4k3/2r5/8/8/8/8/8/4K3 w - - 0 1") `shouldBe` False
+
+            it "should not consider pawn+king vs. king as insufficient material" $ do
+              isInsufficientMaterial (game "4k3/8/8/8/8/8/1P6/4K3 w - - 0 10") `shouldBe` False
+              isInsufficientMaterial (game "4k3/2p5/8/8/8/8/8/4K3 w - - 0 1") `shouldBe` False
+
+            it "should not consider knight+bishop+king vs. king as insufficient material" $ do
+              isInsufficientMaterial (game "4k3/8/8/8/8/8/2BN4/4K3 w - - 0 1") `shouldBe` False
+
+            it "should not consider bishop+bishop+king vs. king as insufficient material if bishops are on different colored squares" $ do
+              isInsufficientMaterial (game "4k3/8/8/8/8/8/2BB4/4K3 w - - 0 1") `shouldBe` False
+
+            it "should consider bishop+bishop+king vs. king as insufficient material if bishops are on same colored squares" $ do
+              isInsufficientMaterial (game "4k3/8/8/8/8/2B5/3B4/4K3 w - - 0 1") `shouldBe` True
+
+            it "should not consider knight+knight+king vs. king as insufficient material" $ do
+              isInsufficientMaterial (game "4k3/8/8/8/8/8/2NN4/4K3 w - - 0 1") `shouldBe` False
+
+            it "should consider king vs. king as insufficient material" $ do
+              isInsufficientMaterial (game "4k3/8/8/8/8/8/8/4K3 w - - 0 10") `shouldBe` True
+
+            it "should consider bishop+king vs. king as insufficient material" $ do
+              isInsufficientMaterial (game "4k3/8/8/8/8/8/8/3BK3 w - - 0 10") `shouldBe` True
+              isInsufficientMaterial (game "4k3/2b5/8/8/8/8/8/4K3 w - - 0 1") `shouldBe` True
+
+            it "should consider knight+king vs. king as insufficient material" $ do
+              isInsufficientMaterial (game "4k3/8/8/8/8/8/8/3NK3 w - - 0 10") `shouldBe` True
+              isInsufficientMaterial (game "4k3/2n5/8/8/8/8/8/4K3 w - - 0 1") `shouldBe` True
+
+            it "should consider bishop+king vs. bishop+king as insufficient material if both bishops are on same color square" $ do
+              isInsufficientMaterial (game "4k3/8/3b4/8/8/8/1B6/4K3 w - - 0 10") `shouldBe` True
+
+            it "should consider n*bishop+king vs. n*bishop+king as insufficient material if bishop pairs are on same color square" $ do
+              isInsufficientMaterial (game "8/b1B1b1B1/1b1B1b1B/8/8/8/8/1k5K w - - 0 1") `shouldBe` True
+
+            it "should not consider n*bishop+king vs. n*bishop+king as insufficient material if bishop pairs are on different color square" $ do
+              isInsufficientMaterial (game "8/bB2b1B1/1b1B1b1B/8/8/8/8/1k5K w - - 0 1") `shouldBe` False
+
+            it "should not consider bishop+king vs. bishop+king as insufficient material if both bishops are on different color square" $ do
+              isInsufficientMaterial (game "4k3/8/4b3/8/8/8/1B6/4K3 w - - 0 10") `shouldBe` False
+
 testApplyingMove :: String -> Move -> String -> Expectation
 testApplyingMove beforeFen move afterFen = (writeFEN newGame) `shouldBe` afterFen
         where Right newGame = applyMove (game beforeFen) move
