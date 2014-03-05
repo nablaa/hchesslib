@@ -174,6 +174,20 @@ getPlayerPiecesTest = TestList [
         , S.fromList [Knight, Pawn, King] ~=? S.fromList (getPlayerPieces (fenBoard "4k3/8/5np1/8/8/2BB4/2Q5/4K3 w - - 0 1") Black)
         ]
 
+getSquareColorTest :: Test
+getSquareColorTest = TestList [
+          Black ~=? getSquareColor (coord "a1")
+        , Black ~=? getSquareColor (coord "c1")
+        , Black ~=? getSquareColor (coord "g5")
+        , Black ~=? getSquareColor (coord "d8")
+        , Black ~=? getSquareColor (coord "h8")
+        , White ~=? getSquareColor (coord "a2")
+        , White ~=? getSquareColor (coord "b5")
+        , White ~=? getSquareColor (coord "f3")
+        , White ~=? getSquareColor (coord "h1")
+        , White ~=? getSquareColor (coord "a8")
+        ]
+
 boardTests :: Test
 boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        getPieceTest, movePieceTest, parsingBoardCompactTest,
@@ -182,4 +196,4 @@ boardTests = TestList [boardPrintingTests, boardCoordinateTests,
                        iterateDirectionInsideBoardTest,
                        getKingSquareTest, isSquareThreatenedTest,
                        isCheckTest, getSquaresWithOwnerTest,
-                       getPlayerPiecesTest]
+                       getPlayerPiecesTest, getSquareColorTest]
