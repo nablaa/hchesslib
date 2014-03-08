@@ -2,11 +2,10 @@ import Test.HUnit
 
 import System.Exit (exitFailure, exitSuccess)
 import MoveTests
-import FENTests
 import PieceTests
 
 tests :: Test
-tests = TestList [moveTests, fenTests, pieceTests]
+tests = TestList [moveTests, pieceTests]
 
 main :: IO ()
 main = do c <- runTestTT tests
