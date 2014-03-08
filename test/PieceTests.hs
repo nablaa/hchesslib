@@ -1,34 +1,43 @@
 module PieceTests where
 
 import Piece
-import Test.HUnit
+import Test.Hspec
 
-printPieceTests :: Test
-printPieceTests = TestList [
-          "K" ~=? printPiece (Piece White King)
-        , "q" ~=? printPiece (Piece Black Queen)
-        , "p" ~=? printPiece (Piece Black Pawn)
-        , "R" ~=? printPiece (Piece White Rook)
-        , "b" ~=? printPiece (Piece Black Bishop)
-        , "N" ~=? printPiece (Piece White Knight)
-        ]
+pieceSpec :: IO ()
+pieceSpec = hspec $
+        describe "Piece" $ do
+          printPieceSpec
+          parsePieceSpec
 
-parsePieceTests :: Test
-parsePieceTests = TestList [
-          Just (Piece Black King) ~=? parsePiece 'k'
-        , Just (Piece White Queen) ~=? parsePiece 'Q'
-        , Just (Piece White Pawn) ~=? parsePiece 'P'
-        , Just (Piece Black Rook) ~=? parsePiece 'r'
-        , Just (Piece White Rook) ~=? parsePiece 'R'
-        , Just (Piece White Bishop) ~=? parsePiece 'B'
-        , Just (Piece Black Knight) ~=? parsePiece 'n'
-        , Nothing ~=? parsePiece 'a'
-        , Nothing ~=? parsePiece 'c'
-        , Nothing ~=? parsePiece 'd'
-        , Nothing ~=? parsePiece '0'
-        , Nothing ~=? parsePiece '5'
-        , Nothing ~=? parsePiece '!'
-        ]
+printPieceSpec :: Spec
+printPieceSpec =
+        describe "printPiece" $ do
+          it "should print white player pieces uppercase" $ do
+            printPiece (Piece White King) `shouldBe` "K"
+            printPiece (Piece White Rook) `shouldBe` "R"
+            printPiece (Piece White Knight) `shouldBe` "N"
 
-pieceTests :: Test
-pieceTests = TestList [printPieceTests, parsePieceTests]
+          it "should print black player pieces lowercase" $ do
+            printPiece (Piece Black Queen) `shouldBe` "q"
+            printPiece (Piece Black Pawn) `shouldBe` "p"
+            printPiece (Piece Black Bishop) `shouldBe` "b"
+
+parsePieceSpec :: Spec
+parsePieceSpec =
+        describe "parsePiece" $ do
+          it "should parse legal piecetypes correctly" $ do
+            parsePiece 'k' `shouldBe` Just (Piece Black King)
+            parsePiece 'Q' `shouldBe` Just (Piece White Queen)
+            parsePiece 'P' `shouldBe` Just (Piece White Pawn)
+            parsePiece 'r' `shouldBe` Just (Piece Black Rook)
+            parsePiece 'R' `shouldBe` Just (Piece White Rook)
+            parsePiece 'B' `shouldBe` Just (Piece White Bishop)
+            parsePiece 'n' `shouldBe` Just (Piece Black Knight)
+
+          it "should not parse invalid piecetypes" $ do
+            parsePiece 'a' `shouldBe` Nothing
+            parsePiece 'c' `shouldBe` Nothing
+            parsePiece 'd' `shouldBe` Nothing
+            parsePiece '0' `shouldBe` Nothing
+            parsePiece '5' `shouldBe` Nothing
+            parsePiece '!' `shouldBe` Nothing
