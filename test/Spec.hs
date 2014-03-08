@@ -1,5 +1,7 @@
 import Test.Hspec
 import GameTests
+import NotationTests
 
 main :: IO ()
-main = gameSpec
+main = do gameSpec
+          notationSpec
