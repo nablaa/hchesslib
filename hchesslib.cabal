@@ -39,17 +39,3 @@ Test-Suite spec
                         , containers >= 0.4
                         , attoparsec
                         , text
-
-Test-Suite unit
-  Type:                 exitcode-stdio-1.0
-  Default-Language:     Haskell2010
-  Hs-Source-Dirs:       test, src
-  Ghc-Options:          -Wall
-  Main-Is:              UnitTests.hs
-  Build-Depends:        base
-                        , HUnit
-                        , QuickCheck
-                        , array >= 0.4
-                        , containers >= 0.4
-                        , attoparsec
-                        , text
