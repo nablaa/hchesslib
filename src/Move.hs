@@ -116,7 +116,7 @@ generateAllKingMoves game coords = map (Movement piece coords) moveSquares
                                    ++ map (Capture piece coords) captureSquares
                                    ++ kingCastlingMoves game coords
         where board = stateBoard game
-              piece@(Piece player _) = fromJust $ getPiece board coords
+              piece = fromJust $ getPiece board coords
               moveSquares = kingMoveSquares game coords
               captureSquares = kingCaptureSquares game coords
 
@@ -164,7 +164,7 @@ kingCaptureSquares :: GameState -> Coordinates -> [Coordinates]
 kingCaptureSquares game start = opponentSquares
         where allSquares = map (sumSquares start) queenPattern
               board = stateBoard game
-              piece@(Piece player _) = fromJust $ getPiece board start
+              (Piece player _) = fromJust $ getPiece board start
               opponentSquares = filter (\square -> isOpponentSquare board square player) $ filter isInsideBoard allSquares
 
 kingCastlingMoves :: GameState -> Coordinates -> [Move]
