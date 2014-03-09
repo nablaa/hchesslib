@@ -162,10 +162,10 @@ isSquareThreatened board opponentPlayer coords = knightsThreaten || pawnsThreate
               isOpponentKing square  = case getPiece board square of
                                                 Just (Piece player King) -> player == opponentPlayer
                                                 _ -> False
-              potentialOpponentRookQueenPieces = catMaybes $ map (firstPieceInSquareList board . iterateDirectionInsideBoard coords) rookPattern
+              potentialOpponentRookQueenPieces = mapMaybe (firstPieceInSquareList board . iterateDirectionInsideBoard coords) rookPattern
               rookOrQueenThreatens = any isOpponentRookOrQueen potentialOpponentRookQueenPieces
               isOpponentRookOrQueen (Piece color piecetype) = color == opponentPlayer && piecetype `elem` [Rook, Queen]
-              potentialOpponentBishopQueenPieces = catMaybes $ map (firstPieceInSquareList board . iterateDirectionInsideBoard coords) bishopPattern
+              potentialOpponentBishopQueenPieces = mapMaybe (firstPieceInSquareList board . iterateDirectionInsideBoard coords) bishopPattern
               bishopOrQueenThreatens = any isOpponentBishopOrQueen potentialOpponentBishopQueenPieces
               isOpponentBishopOrQueen (Piece color piecetype) = color == opponentPlayer && piecetype `elem` [Bishop, Queen]
 

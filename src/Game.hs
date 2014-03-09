@@ -60,7 +60,7 @@ updateEnPassantSquare (PawnDoubleMove (Piece Black Pawn) _ (row, col)) = Just (r
 updateEnPassantSquare _ = Nothing
 
 updateHalfMoveClock :: GameState -> Move -> Integer
-updateHalfMoveClock _ (Capture _ _ _) = 0
+updateHalfMoveClock _ Capture{} = 0
 updateHalfMoveClock _ (Movement (Piece _ Pawn) _ _) = 0
 updateHalfMoveClock _ (PawnDoubleMove (Piece _ Pawn) _ _) = 0
 updateHalfMoveClock _ (Promotion (Piece _ Pawn) _ _ _) = 0
@@ -71,10 +71,10 @@ updateMoveNumber (State _ White _ _ _ _ number) = number
 updateMoveNumber (State _ Black _ _ _ _ number) = number + 1
 
 isCheckmate :: GameState -> Bool
-isCheckmate game@(State board player _ _ _ _ _) = generateAllMoves game == [] && isCheck board player
+isCheckmate game@(State board player _ _ _ _ _) = null (generateAllMoves game) && isCheck board player
 
 isStalemate :: GameState -> Bool
-isStalemate game@(State board player _ _ _ _ _) = generateAllMoves game == [] && not (isCheck board player)
+isStalemate game@(State board player _ _ _ _ _) = null (generateAllMoves game) && not (isCheck board player)
 
 isInsufficientMaterial :: GameState -> Bool
 isInsufficientMaterial game = isInsufficientMaterialByPieces whitePieces blackPieces || isInsufficientMaterialWithBishops board whitePieces blackPieces
@@ -92,12 +92,12 @@ isInsufficientMaterialByPieces _ _ = False
 
 isInsufficientMaterialWithBishops :: Board -> [PieceType] -> [PieceType] -> Bool
 isInsufficientMaterialWithBishops _ white black | not (onlyBishops white && onlyBishops black) = False
-        where onlyBishops pieces = filter (/= Bishop) pieces == []
+        where onlyBishops pieces = not (any (/= Bishop) pieces)
 isInsufficientMaterialWithBishops board _ _ = bishopsOnWhite /= bishopsOnBlack
         where whiteSquaresWithBishops = filter (\x -> getSquareColor x == White) $ getSquaresWithPieces board Bishop
               blackSquaresWithBishops = filter (\x -> getSquareColor x == Black) $ getSquaresWithPieces board Bishop
-              bishopsOnWhite = length whiteSquaresWithBishops > 0
-              bishopsOnBlack = length blackSquaresWithBishops > 0
+              bishopsOnWhite = not (null whiteSquaresWithBishops)
+              bishopsOnBlack = not (null blackSquaresWithBishops)
 
 isDraw :: GameState -> Bool
 isDraw game = isStalemate game || isInsufficientMaterial game

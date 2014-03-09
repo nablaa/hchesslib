@@ -15,10 +15,10 @@ fenSpec = hspec $
 writeFENSpec :: Spec
 writeFENSpec =
         describe "writeFEN" $ do
-          it "should serialize initial game state correctly" $ do
+          it "should serialize initial game state correctly" $
             writeFEN initialState `shouldBe` "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
-          it "should serialize En Passant move and move counters correctly" $ do
+          it "should serialize En Passant move and move counters correctly" $
             writeFEN (Move.State initialBoard Black [] [] (parseCoordinate "e3") 4 14) `shouldBe` "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b - e3 4 14"
 
           it "should serialize castlings correctly" $ do
@@ -28,17 +28,17 @@ writeFENSpec =
 readFENSpec :: Spec
 readFENSpec =
         describe "readFEN" $ do
-          it "should read initial game state FEN correctly" $ do
+          it "should read initial game state FEN correctly" $
             readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" `shouldBe` Just initialState
 
           it "should read FEN with castlings, En Passant and move counters correctly" $ do
             readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Kq e3 7 14" `shouldBe` Just (Move.State initialBoard White [Short] [Long] (parseCoordinate "e3") 7 14)
             readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 10 42" `shouldBe` Just (Move.State initialBoard White [] [] Nothing 10 42)
 
-          it "should not read FEN with missing castling information" $ do
+          it "should not read FEN with missing castling information" $
             readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - 0 1" `shouldBe` Nothing
 
-          it "should not read FEN with invalid player information" $ do
+          it "should not read FEN with invalid player information" $
             readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR K KQkq - 0 1" `shouldBe` Nothing
 
           it "should not read FEN with invalid move counter information" $ do

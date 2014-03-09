@@ -25,7 +25,7 @@ findMoveForCoordinates game start end (Just promotion) = findPromotionMove start
 findMoveForCoordinates _ _ _ _ = Nothing
 
 findPromotionMove :: Coordinates -> Coordinates -> PieceType -> [Move] -> Maybe Move
-findPromotionMove start end promotion moves = find matchPromotionMove moves
+findPromotionMove start end promotion = find matchPromotionMove
         where matchPromotionMove (Promotion _ s e p) = s == start && e == end && p == promotion
               matchPromotionMove _ = False
 
@@ -68,14 +68,14 @@ parsePromotion = (Just <$> parsePromotionEqualSign) <|> (Just <$> parsePromotion
 
 parsePromotionEqualSign :: Parser PieceType
 parsePromotionEqualSign = do _ <- char '='
-                             promotionChar <- satisfy (`elem` ['N', 'B', 'R', 'Q'])
+                             promotionChar <- satisfy (`elem` "NBRQ")
                              case parsePieceType promotionChar of
                                      Just piece -> return piece
                                      Nothing -> fail "Invalid promotion piecetype"
 
 parsePromotionParenthesis :: Parser PieceType
 parsePromotionParenthesis = do _ <- char '('
-                               promotionChar <- satisfy (`elem` ['N', 'B', 'R', 'Q'])
+                               promotionChar <- satisfy (`elem` "NBRQ")
                                _ <- char ')'
                                case parsePieceType promotionChar of
                                        Just piece -> return piece

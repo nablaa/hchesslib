@@ -24,7 +24,7 @@ moveSpec = hspec $
 
 isCorrectStartPieceSpec :: Spec
 isCorrectStartPieceSpec =
-        describe "isCorrectStartPiece" $ do
+        describe "isCorrectStartPiece" $
           it "should detect whether the piece in the coordinates matches the given piece information" $ do
              isCorrectStartPiece initialBoard (Piece White Pawn) (coord "e2") `shouldBe` True
              isCorrectStartPiece initialBoard (Piece White Knight) (coord "b1") `shouldBe` True
@@ -34,7 +34,7 @@ isCorrectStartPieceSpec =
 
 isRightPlayerMoveSpec :: Spec
 isRightPlayerMoveSpec =
-        describe "isRightPlayerMove" $ do
+        describe "isRightPlayerMove" $
           it "should detect whether the movement is by given player" $ do
              isRightPlayerMove White (Movement (Piece White Pawn) (coord "e2") (coord "e3")) `shouldBe` True
              isRightPlayerMove White (Movement (Piece Black Pawn) (coord "e7") (coord "e6")) `shouldBe` False
@@ -64,7 +64,7 @@ areCoordinatesValidSpec =
 generateAllRookMovesSpec :: Spec
 generateAllRookMovesSpec =
         describe "generateAllRookMoves" $ do
-          it "should return all movement and capture moves for a rook in a square" $ do
+          it "should return all movement and capture moves for a rook in a square" $
             generateAllRookMoves (game "k4b1r/p7/7p/4P3/1n2P2R/8/P2B1P2/3K2N1 w - - 6 9") (coord "h4") `shouldMatchList`
               [ Movement (Piece White Rook) (coord "h4") (coord "h5")
               , Movement (Piece White Rook) (coord "h4") (coord "g4")
@@ -74,13 +74,13 @@ generateAllRookMovesSpec =
               , Movement (Piece White Rook) (coord "h4") (coord "h1")
               , Capture (Piece White Rook) (coord "h4") (coord "h6")]
 
-          it "should return empty list of moves if no move is possible" $ do
+          it "should return empty list of moves if no move is possible" $
             generateAllRookMoves (game "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") (coord "a1") `shouldMatchList` []
 
 generateAllBishopMovesSpec :: Spec
 generateAllBishopMovesSpec =
         describe "generateAllBishopMoves" $ do
-          it "should return all movement and capture moves for a bishop in a square" $ do
+          it "should return all movement and capture moves for a bishop in a square" $
             generateAllBishopMoves (game "rnb1kbnr/pppp1ppp/8/5p2/8/3B4/PPPP3P/Rq1QKN2 w Qkq - 4 12") (coord "d3") `shouldMatchList`
               [ Movement (Piece White Bishop) (coord "d3") (coord "c4")
               , Movement (Piece White Bishop) (coord "d3") (coord "b5")
@@ -89,7 +89,7 @@ generateAllBishopMovesSpec =
               , Movement (Piece White Bishop) (coord "d3") (coord "e2")
               , Capture (Piece White Bishop) (coord "d3") (coord "f5")]
 
-          it "should return empty list of moves if no move is possible" $ do
+          it "should return empty list of moves if no move is possible" $
             generateAllBishopMoves (game "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") (coord "c1") `shouldMatchList` []
 
 generateAllQueenMovesSpec :: Spec
@@ -119,12 +119,12 @@ generateAllQueenMovesSpec =
               , Capture (Piece White Queen) (coord "c4") (coord "c7")
               , Capture (Piece White Queen) (coord "c4") (coord "e6")]
 
-          it "should return empty list of moves if no move is possible" $ do
+          it "should return empty list of moves if no move is possible" $
             generateAllQueenMoves (game "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") (coord "d1") `shouldMatchList` []
 
 generateAllKnightMovesSpec :: Spec
 generateAllKnightMovesSpec =
-        describe "generateAllKnightMoves" $ do
+        describe "generateAllKnightMoves" $
           it "should return all movement and capture moves for a knight in a square" $ do
             generateAllKnightMoves (game "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") (coord "b1") `shouldMatchList`
               [ Movement (Piece White Knight) (coord "b1") (coord "a3")
@@ -139,10 +139,10 @@ generateAllKnightMovesSpec =
 generateAllKingMovesSpec :: Spec
 generateAllKingMovesSpec =
         describe "generateAllKingMoves" $ do
-          it "should return empty list of moves if no move is possible" $ do
+          it "should return empty list of moves if no move is possible" $
             generateAllKingMoves (game "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") (coord "e1") `shouldMatchList` []
 
-          it "should return all movement and capture moves for a king in a square" $ do
+          it "should return all movement and capture moves for a king in a square" $
             generateAllKingMoves (game "2b5/pkp1prpp/8/rpn5/1K6/2P5/PP2N1PR/N1Q5 w - - 2 15") (coord "b4") `shouldMatchList`
               [ Movement (Piece White King) (coord "b4") (coord "a4")
               , Movement (Piece White King) (coord "b4") (coord "a3")
@@ -152,7 +152,7 @@ generateAllKingMovesSpec =
               , Capture (Piece White King) (coord "b4") (coord "b5")
               , Capture (Piece White King) (coord "b4") (coord "c5")]
 
-          it "should return castling moves when castling is possible" $ do
+          it "should return castling moves when castling is possible" $
             generateAllKingMoves (game "1rq1kbr1/pppbnn1p/8/8/8/3N4/PPPP2PP/R3K2R w KQ - 0 10") (coord "e1") `shouldMatchList`
               [ Movement (Piece White King) (coord "e1") (coord "d1")
               , Movement (Piece White King) (coord "e1") (coord "e2")
@@ -173,35 +173,35 @@ generateAllKingMovesSpec =
               , Movement (Piece Black King) (coord "e8") (coord "f8")
               , Castling Black Short]
 
-          it "should not return castling move if there is piece between castling line" $ do
+          it "should not return castling move if there is piece between castling line" $
             generateAllKingMoves (game "4k3/n7/8/8/8/5N2/P1N2PPP/R1n1K1R1 w Q - 0 16") (coord "e1") `shouldMatchList`
               [ Movement (Piece White King) (coord "e1") (coord "d1")
               , Movement (Piece White King) (coord "e1") (coord "d2")
               , Movement (Piece White King) (coord "e1") (coord "e2")
               , Movement (Piece White King) (coord "e1") (coord "f1")]
 
-          it "should not return castling move if there is an opponent piece threatening castling end square" $ do
+          it "should not return castling move if there is an opponent piece threatening castling end square" $
             generateAllKingMoves (game "3rk1r1/5p2/8/8/3b2N1/5P2/1PP1P1PP/4K2R w K - 2 20") (coord "e1") `shouldMatchList`
               [ Movement (Piece White King) (coord "e1") (coord "d1")
               , Movement (Piece White King) (coord "e1") (coord "d2")
               , Movement (Piece White King) (coord "e1") (coord "f1")
               , Movement (Piece White King) (coord "e1") (coord "f2")]
 
-          it "should not return castling move if there is an opponent piece threatening a castling line square" $ do
+          it "should not return castling move if there is an opponent piece threatening a castling line square" $
             generateAllKingMoves (game "3rk3/5p2/5r2/8/3P2N1/8/1PP1P1PP/4K2R w K - 0 12") (coord "e1") `shouldMatchList`
               [ Movement (Piece White King) (coord "e1") (coord "d1")
               , Movement (Piece White King) (coord "e1") (coord "d2")
               , Movement (Piece White King) (coord "e1") (coord "f1")
               , Movement (Piece White King) (coord "e1") (coord "f2")]
 
-          it "castling out of check should not be legal" $ do
+          it "castling out of check should not be legal" $
             generateAllKingMoves (game "3rk3/5p2/4r3/8/3P2N1/8/1PP2PPP/4K2R w K - 0 12") (coord "e1") `shouldMatchList`
               [ Movement (Piece White King) (coord "e1") (coord "d1")
               , Movement (Piece White King) (coord "e1") (coord "d2")
               , Movement (Piece White King) (coord "e1") (coord "e2")
               , Movement (Piece White King) (coord "e1") (coord "f1")]
 
-          it "castling when rook is threatened should be possible" $ do
+          it "castling when rook is threatened should be possible" $
             generateAllKingMoves (game "3rk3/5p2/7r/8/3P2N1/8/1PP2PP1/4K2R w K - 0 12") (coord "e1") `shouldMatchList`
               [ Movement (Piece White King) (coord "e1") (coord "d1")
               , Movement (Piece White King) (coord "e1") (coord "d2")
@@ -224,16 +224,16 @@ generateAllPawnMovesSpec =
             generateAllPawnMoves (game "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 1") (coord "e4") `shouldMatchList` []
             generateAllPawnMoves (game "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 1") (coord "e5") `shouldMatchList` []
 
-          it "should return both movement and capture moves when possible" $ do
+          it "should return both movement and capture moves when possible" $
             generateAllPawnMoves (game "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPP5/RNBQKBNR w KQkq - 0 1") (coord "f4") `shouldMatchList`
               [ Movement (Piece White Pawn) (coord "f4") (coord "f5")
               , Capture (Piece White Pawn) (coord "f4") (coord "e5")]
 
-          it "should return only capture when normal movement is not possible" $ do
+          it "should return only capture when normal movement is not possible" $
             generateAllPawnMoves (game "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPP5/RNBQKBNR w KQkq - 0 1") (coord "e5") `shouldMatchList`
               [ Capture (Piece Black Pawn) (coord "e5") (coord "f4")]
 
-          it "should return normal movement when capture is not possible" $ do
+          it "should return normal movement when capture is not possible" $
             generateAllPawnMoves (game "rnbqkbnr/pppp1p1p/8/4pPp1/4P3/8/PPPP2PP/RNBQKBNR w KQkq - 0 4") (coord "f5") `shouldMatchList`
               [ Movement (Piece White Pawn) (coord "f5") (coord "f6")]
 
@@ -245,7 +245,7 @@ generateAllPawnMovesSpec =
               [ Movement (Piece Black Pawn) (coord "d4") (coord "d3")
               , EnPassant (Piece Black Pawn) (coord "d4") (coord "c3")]
 
-          it "should not return en passant when en passant square is not one of the capture squares" $ do
+          it "should not return en passant when en passant square is not one of the capture squares" $
             generateAllPawnMoves (game "rnbqkbnr/1pppp3/p5pp/3PPp2/8/8/PPP2PPP/RNBQKBNR w KQkq f6 0 5") (coord "d5") `shouldMatchList`
               [ Movement (Piece White Pawn) (coord "d5") (coord "d6")]
 
@@ -273,13 +273,13 @@ generateAllPawnMovesSpec =
             generateAllPawnMoves (game "k7/8/8/8/8/8/p7/N3K3 w - - 0 1") (coord "a2") `shouldMatchList` []
             generateAllPawnMoves (game "k7/8/8/8/8/4b3/4P3/K7 w - - 0 1") (coord "e2") `shouldMatchList` []
 
-          it "should generate normal movement correctly" $ do
+          it "should generate normal movement correctly" $
             generateAllPawnMoves (game "6k1/8/8/8/8/3P4/8/4K3 w - - 0 1") (coord "d3") `shouldMatchList`
               [ Movement (Piece White Pawn) (coord "d3") (coord "d4")]
 
 generateAllPotentialMovesSpec :: Spec
 generateAllPotentialMovesSpec =
-        describe "generateAllPotentialMoves" $ do
+        describe "generateAllPotentialMoves" $
           it "should return all potential moves for all pieces of the current player" $ do
             generateAllPotentialMoves (game "8/k7/8/8/6p1/7P/6PK/8 w - - 0 1") `shouldMatchList`
               [ Movement (Piece White Pawn) (coord "g2") (coord "g3")
@@ -309,22 +309,22 @@ boardAfterMoveSpec =
             boardAfterMove (fenBoard "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 1") (Movement (Piece White Knight) (coord "g1") (coord "f3")) `shouldBe` Just (fenBoard "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1")
             boardAfterMove (fenBoard "rnbqkbnr/p2p1ppp/p7/2p1N3/4P3/8/PPPP1PPP/RNBQ1RK1 b kq - 0 2") (Movement (Piece Black Pawn) (coord "c5") (coord "c4")) `shouldBe` Just (fenBoard "rnbqkbnr/p2p1ppp/p7/4N3/2p1P3/8/PPPP1PPP/RNBQ1RK1 w kq - 0 3")
 
-          it "should make pawn capture move correctly" $ do
+          it "should make pawn capture move correctly" $
             boardAfterMove (fenBoard "rnbqkbnr/pppp1ppp/B7/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1") (Capture (Piece Black Pawn) (coord "b7") (coord "a6")) `shouldBe` Just (fenBoard "rnbqkbnr/p1pp1ppp/p7/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1")
 
-          it "should move king and rook correctly in castling move" $ do
+          it "should move king and rook correctly in castling move" $
             boardAfterMove (fenBoard "rnbqkbnr/p1pp1ppp/p7/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1") (Castling White Short) `shouldBe` Just (fenBoard "rnbqkbnr/p1pp1ppp/p7/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 1")
 
-          it "should make knight's capture move correctly" $ do
+          it "should make knight's capture move correctly" $
             boardAfterMove (fenBoard "rnbqkbnr/p2p1ppp/p7/2p1p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq c6 0 2") (Capture (Piece White Knight) (coord "f3") (coord "e5")) `shouldBe` Just (fenBoard "rnbqkbnr/p2p1ppp/p7/2p1N3/4P3/8/PPPP1PPP/RNBQ1RK1 b kq - 0 2")
 
-          it "should make en passant move correctly" $ do
+          it "should make en passant move correctly" $
             boardAfterMove (fenBoard "rnbqkbnr/p2p1ppp/p7/4N3/2pPP3/8/PPP2PPP/RNBQ1RK1 b kq d3 0 3") (EnPassant (Piece Black Pawn) (coord "c4") (coord "d3")) `shouldBe` Just (fenBoard "rnbqkbnr/p2p1ppp/p7/4N3/4P3/3p4/PPP2PPP/RNBQ1RK1 w kq - 0 4")
 
 generateAllMovesSpec :: Spec
 generateAllMovesSpec =
         describe "generateAllMoves" $ do
-          it "should generate all legal moves for the current player in a given game state" $ do
+          it "should generate all legal moves for the current player in a given game state" $
             generateAllMoves (game "rnbqkb1r/pp1p1Bpp/5n2/2p1p3/4P3/2P5/PP1P1PPP/RNBQK1NR b KQkq - 0 4") `shouldMatchList`
               [Movement (Piece Black King) (0,4) (1,4), Capture (Piece Black King) (0,4) (1,5)]
 

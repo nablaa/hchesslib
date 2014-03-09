@@ -42,7 +42,7 @@ initialState = State initialBoard White [Short, Long] [Short, Long] Nothing 0 1
 
 generateAllMoves :: GameState -> [Move]
 generateAllMoves game = filter isLegalMove $ generateAllPotentialMoves game
-        where isLegalMove move = isMoveError game move == Nothing
+        where isLegalMove move = isNothing (isMoveError game move)
 
 isInCheckAfterMove :: GameState -> Move -> Bool
 isInCheckAfterMove game move = case newBoard of
@@ -64,11 +64,11 @@ isMoveError game move | not (isCorrectPlayer game move) = Just WrongPlayer
                       | not (isCorrectPiece game move) = Just WrongPiece
                       | not (isCorrectBoardMove game move) = Just InvalidCoordinates
                       | isInCheckAfterMove game move = Just InCheck
-                      | not (move `elem` generateAllPotentialMoves game) = Just InvalidMove
+                      | move `notElem` generateAllPotentialMoves game = Just InvalidMove
                       | otherwise = Nothing
 
 isCorrectBoardMove :: GameState -> Move -> Bool
-isCorrectBoardMove game move = boardAfterMove (stateBoard game) move /= Nothing
+isCorrectBoardMove game move = isJust (boardAfterMove (stateBoard game) move)
 
 isCorrectStartPiece :: Board -> Piece -> Coordinates -> Bool
 isCorrectStartPiece board (Piece color pieceType) coordinates
@@ -78,7 +78,7 @@ isCorrectStartPiece board (Piece color pieceType) coordinates
         where boardPiece = getPiece board coordinates
 
 isCorrectPlayer :: GameState -> Move -> Bool
-isCorrectPlayer game move = isRightPlayerMove (currentPlayer game) move
+isCorrectPlayer game = isRightPlayerMove (currentPlayer game)
 
 isRightPlayerMove :: Color -> Move -> Bool
 isRightPlayerMove player (Movement (Piece color _) _ _) = player == color
@@ -103,8 +103,8 @@ generateAllQueenMoves :: GameState -> Coordinates -> [Move]
 generateAllQueenMoves game coords = patternMoves game coords queenPattern
 
 generateAllKnightMoves :: GameState -> Coordinates -> [Move]
-generateAllKnightMoves game coords = map (\coordinate -> Movement piece coords coordinate) emptySquares
-                                     ++ map (\coordinate -> Capture piece coords coordinate) opponentSquares
+generateAllKnightMoves game coords = map (Movement piece coords) emptySquares
+                                     ++ map (Capture piece coords) opponentSquares
         where squares = filter isInsideBoard [sumSquares coords jump | jump <- knightPattern]
               board = stateBoard game
               emptySquares = filter (isEmpty board) squares
@@ -112,8 +112,8 @@ generateAllKnightMoves game coords = map (\coordinate -> Movement piece coords c
               opponentSquares = filter (\square -> isOpponentSquare board square player) squares
 
 generateAllKingMoves :: GameState -> Coordinates -> [Move]
-generateAllKingMoves game coords = map (\coordinate -> Movement piece coords coordinate) moveSquares
-                                   ++ map (\coordinate -> Capture piece coords coordinate) captureSquares
+generateAllKingMoves game coords = map (Movement piece coords) moveSquares
+                                   ++ map (Capture piece coords) captureSquares
                                    ++ kingCastlingMoves game coords
         where board = stateBoard game
               piece@(Piece player _) = fromJust $ getPiece board coords
@@ -136,15 +136,9 @@ generateAllPawnMoves game coords@(row, _) = move ++ doubleMove ++ captures ++ pr
               moveSquare = sumSquares coords (moveDirection, 0)
               doubleMoveSquare = sumSquares coords (moveDirection * 2, 0)
               captureSquares = map (sumSquares coords) [(moveDirection, -1), (moveDirection, 1)]
-              move = if isEmpty board moveSquare && not isNextToPromotionRow
-                     then [Movement (Piece player Pawn) coords moveSquare]
-                     else []
-              doubleMove = if isEmpty board moveSquare && isEmpty board doubleMoveSquare && isOnStartRow
-                           then [PawnDoubleMove (Piece player Pawn) coords doubleMoveSquare]
-                           else []
-              capture square = if isOpponentSquare board square player && not isNextToPromotionRow
-                               then [Capture (Piece player Pawn) coords square]
-                               else []
+              move = [Movement (Piece player Pawn) coords moveSquare | isEmpty board moveSquare && not isNextToPromotionRow]
+              doubleMove = [PawnDoubleMove (Piece player Pawn) coords doubleMoveSquare | isEmpty board moveSquare && isEmpty board doubleMoveSquare && isOnStartRow]
+              capture square = [Capture (Piece player Pawn) coords square | isOpponentSquare board square player && not isNextToPromotionRow]
               captures = concatMap capture captureSquares
               promotionCapture square = if isOpponentSquare board square player
                                         then map (Promotion (Piece player Pawn) coords square) [Rook, Bishop, Knight, Queen]
@@ -157,9 +151,7 @@ generateAllPawnMoves game coords@(row, _) = move ++ doubleMove ++ captures ++ pr
                            else []
               epSquare = enPassantSquare game
               enpassant = case epSquare of
-                                  Just square -> if square `elem` captureSquares
-                                                 then [EnPassant (Piece player Pawn) coords square]
-                                                 else []
+                                  Just square -> [EnPassant (Piece player Pawn) coords square | square `elem` captureSquares]
                                   Nothing -> []
 
 kingMoveSquares :: GameState -> Coordinates -> [Coordinates]
@@ -201,24 +193,23 @@ patternMoves game start pattern
         ++ concat [capturesInDirection game start dir | dir <- pattern]
 
 movementsInDirection :: GameState -> Coordinates -> (Int, Int) -> [Move]
-movementsInDirection game start direction = map (\coordinate -> Movement piece start coordinate) squares
+movementsInDirection game start direction = map (Movement piece start) squares
         where piece = fromJust $ getPiece (stateBoard game) start
               squares = iterateMovementSquares game start direction
 
 capturesInDirection :: GameState -> Coordinates -> (Int, Int) -> [Move]
-capturesInDirection game start direction = map (\coordinate -> Capture piece start coordinate) squares
+capturesInDirection game start direction = map (Capture piece start) squares
         where piece = fromJust $ getPiece (stateBoard game) start
               squares = iterateCaptureSquares game start direction
 
 iterateMovementSquares :: GameState -> Coordinates -> (Int, Int) -> [Coordinates]
-iterateMovementSquares game start direction = iterateDirection (isEmptySquare) game start direction
-        where isEmptySquare game' coord = isEmpty (stateBoard game') coord
+iterateMovementSquares = iterateDirection isEmptySquare
+        where isEmptySquare game' = isEmpty (stateBoard game')
 
 iterateCaptureSquares :: GameState -> Coordinates -> (Int, Int) -> [Coordinates]
 iterateCaptureSquares game start direction = case squaresNotEmpty of
                                                      [] -> []
-                                                     (first:_) -> if isOpponentSquare board first player then [first]
-                                                                                                         else []
+                                                     (first:_) -> [first | isOpponentSquare board first player]
         where squares = iterateDirectionInsideBoard start direction
               board = stateBoard game
               (Piece player _) = fromJust $ getPiece board start

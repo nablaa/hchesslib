@@ -31,16 +31,16 @@ boardSpec = hspec $
 boardPrintingSpec :: Spec
 boardPrintingSpec =
         describe "printBoardCompact" $ do
-          it "should print initial board position correctly" $ do
+          it "should print initial board position correctly" $
             printBoardCompact initialBoard `shouldBe` "rnbqkbnr\npppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n"
 
-          it "should print empty board correctly" $ do
+          it "should print empty board correctly" $
             printBoardCompact emptyBoard `shouldBe` "        \n        \n        \n        \n        \n        \n        \n        \n"
 
 isInsideBoardSpec :: Spec
 isInsideBoardSpec =
-        describe "isInsideBoard" $ do
-          it "should detect correctly whether given coordinates are inside board bounds" $ do
+        describe "isInsideBoard" $
+          it "should detect correctly whether given coordinates are inside board bounds" $do
             isInsideBoard (0, 0) `shouldBe` True
             isInsideBoard (7, 7) `shouldBe` True
             isInsideBoard (3, 5) `shouldBe` True
@@ -74,7 +74,7 @@ parseCoordinateSpec =
 
 printCoordinateSpec :: Spec
 printCoordinateSpec =
-        describe "printCoordinate" $ do
+        describe "printCoordinate" $
           it "should print legal coordinates correctly" $ do
             printCoordinate (0, 0) `shouldBe` "a8"
             printCoordinate (0, 1) `shouldBe` "b8"
@@ -90,7 +90,7 @@ getPieceSpec =
             getPiece initialBoard (-1, -1) `shouldBe` Nothing
             getPiece initialBoard (8, 8) `shouldBe` Nothing
 
-          it "should return Nothing for empty squares" $ do
+          it "should return Nothing for empty squares" $
             getPiece initialBoard (4, 4) `shouldBe` Nothing
 
           it "should return piece for squares that have pieces" $ do
@@ -105,7 +105,7 @@ movePieceSpec =
              movePiece (0, 0) (8, 8) initialBoard `shouldBe` Nothing
              movePiece (-1, -1) (7, 7) initialBoard `shouldBe` Nothing
 
-          it "should return Nothing when start square does not have a piece" $ do
+          it "should return Nothing when start square does not have a piece" $
              movePiece (4, 4) (0, 0) initialBoard `shouldBe` Nothing
 
           it "should return new board when start square has a piece and end coordinate is valid" $ do
@@ -116,38 +116,38 @@ movePieceSpec =
 parseBoardCompactSpec :: Spec
 parseBoardCompactSpec =
         describe "parseBoardCompact" $ do
-          it "should be able to parse the initial board" $ do
+          it "should be able to parse the initial board" $
              parseBoardCompact (printBoardCompact initialBoard) `shouldBe` Just initialBoard
 
-          it "should be able to parse the empty board" $ do
+          it "should be able to parse the empty board" $
             parseBoardCompact "        \n        \n        \n        \n        \n        \n        \n        \n" `shouldBe` Just emptyBoard
 
-          it "should return Nothing with invalid board (too short row)" $ do
+          it "should return Nothing with invalid board (too short row)" $
             parseBoardCompact "        \n        \n        \n        \n        \n        \n        \n        \n        \n" `shouldBe` Nothing
 
-          it "should return Nothing with invalid board (too few rows)" $ do
+          it "should return Nothing with invalid board (too few rows)" $
             parseBoardCompact "         \n        \n        \n        \n        \n        \n        \n        \n" `shouldBe` Nothing
 
-          it "should return Nothing with empty input" $ do
+          it "should return Nothing with empty input" $
             parseBoardCompact "" `shouldBe` Nothing
 
-          it "should return Nothing with garbage input" $ do
+          it "should return Nothing with garbage input" $
             parseBoardCompact "foobar" `shouldBe` Nothing
 
           it "should return Nothing with invalid board (invalid pieces)" $ do
              parseBoardCompact "        \n  xxx   \n        \n        \n        \n        \n        \n        \n" `shouldBe` Nothing
              parseBoardCompact "rnbqkbnr\nppxppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" `shouldBe` Nothing
 
-          it "should return Nothing with invalid board (empty row)" $ do
+          it "should return Nothing with invalid board (empty row)" $
              parseBoardCompact "rnbqkbnr\npppppppp\n        \n\n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" `shouldBe` Nothing
 
-          it "should return Nothing with invalid board (missing row)" $ do
+          it "should return Nothing with invalid board (missing row)" $
              parseBoardCompact "pppppppp\n        \n        \n        \n        \nPPPPPPPP\nRNBQKBNR\n" `shouldBe` Nothing
 
 isEmptySpec :: Spec
 isEmptySpec =
         describe "isEmpty" $ do
-          it "should return True for empty squares" $ do
+          it "should return True for empty squares" $
              isEmpty initialBoard (4, 4) `shouldBe` True
 
           it "should return True for squares out of bounds" $ do
@@ -162,7 +162,7 @@ isEmptySpec =
 isOpponentSquareSpec :: Spec
 isOpponentSquareSpec =
         describe "isOpponentSquare" $ do
-          it "should return False for empty squares" $ do
+          it "should return False for empty squares" $
              isOpponentSquare initialBoard (4, 4) White `shouldBe` False
 
           it "should return False for squares out of bounds" $ do
@@ -180,7 +180,7 @@ isOpponentSquareSpec =
 firstPieceInSquareListSpec :: Spec
 firstPieceInSquareListSpec =
         describe "firstPieceInSquareList" $ do
-          it "should return Nothing if none of the coordinates contain any piece" $ do
+          it "should return Nothing if none of the coordinates contain any piece" $
              firstPieceInSquareList initialBoard [(4, 1), (4, 2), (4, 3)] `shouldBe` Nothing
 
           it "should return the piece of the first coordinate from the list that contains a piece" $ do
@@ -190,7 +190,7 @@ firstPieceInSquareListSpec =
 iterateDirectionInsideBoardSpec :: Spec
 iterateDirectionInsideBoardSpec =
         describe "iterateDirectionInsideBoard" $ do
-          it "should return empty list for square next to border with direction towards border" $ do
+          it "should return empty list for square next to border with direction towards border" $
              iterateDirectionInsideBoard (4, 0) (0, -1) `shouldBe` []
 
           it "should return the list of coordinates that you get when you start walking from a square towards a certain direction" $ do
@@ -199,7 +199,7 @@ iterateDirectionInsideBoardSpec =
 
 getKingSquareSpec :: Spec
 getKingSquareSpec =
-        describe "getKingSquare" $ do
+        describe "getKingSquare" $
           it "should return the coordinates of the square where king is currently" $ do
             getKingSquare initialBoard White `shouldBe` coord "e1"
             getKingSquare initialBoard Black `shouldBe` coord "e8"
@@ -221,7 +221,7 @@ isSquareThreatenedSpec =
              isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "b5") `shouldBe` False
              isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "c4") `shouldBe` False
 
-          it "should return True for player square if player piece threatens the given square" $ do
+          it "should return True for player square if player piece threatens the given square" $
              isSquareThreatened initialBoard White (coord "e1") `shouldBe` True
 
           it "should not consider Pawn movement square threatened" $ do
@@ -237,13 +237,13 @@ isSquareThreatenedSpec =
              isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "b4") `shouldBe` True
              isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "f4") `shouldBe` True
 
-          it "should detect when Bishop threatens a square" $ do
+          it "should detect when Bishop threatens a square" $
              isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") White (coord "g8") `shouldBe` True
 
-          it "should detect when Queen threatens a square" $ do
+          it "should detect when Queen threatens a square" $
              isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "b1") `shouldBe` True
 
-          it "should detect when King threatens a square" $ do
+          it "should detect when King threatens a square" $
              isSquareThreatened (fenBoard "rnb1kb1r/ppp1p2p/4Bp2/2Pp4/1q2P1n1/7N/P1NP1PpP/R1BQK2R w KQkq - 0 1") Black (coord "d8") `shouldBe` True
 
           it "should detect when multiple pieces threaten a square" $ do
@@ -271,21 +271,21 @@ isCheckSpec =
 
 getSquaresWithOwnerSpec :: Spec
 getSquaresWithOwnerSpec =
-        describe "getSquaresWithOwner" $ do
+        describe "getSquaresWithOwner" $
           it "should return coordinates which have player pieces" $ do
              getSquaresWithOwner (fenBoard "8/k7/8/8/6p1/7P/6PK/8 w - - 0 1") Black `shouldMatchList` [coord "a7", coord "g4"]
              getSquaresWithOwner (fenBoard "8/k7/8/8/6p1/7P/6PK/8 w - - 0 1") White `shouldMatchList` [coord "g2", coord "h2", coord "h3"]
 
 getPlayerPiecesSpec :: Spec
 getPlayerPiecesSpec =
-        describe "getPlayerPieces" $ do
+        describe "getPlayerPieces" $
           it "should return list of pieces a player owns" $ do
              getPlayerPieces (fenBoard "4k3/8/5np1/8/8/2BB4/2Q5/4K3 w - - 0 1") White `shouldMatchList` [Bishop, Bishop, Queen, King]
              getPlayerPieces (fenBoard "4k3/8/5np1/8/8/2BB4/2Q5/4K3 w - - 0 1") Black `shouldMatchList` [Knight, Pawn, King]
 
 getSquareColorSpec :: Spec
 getSquareColorSpec =
-        describe "getSquareColor" $ do
+        describe "getSquareColor" $
           it "should return the color of the square in the given coordinate" $ do
              getSquareColor (coord "a1") `shouldBe` Black
              getSquareColor (coord "c1") `shouldBe` Black
@@ -300,7 +300,7 @@ getSquareColorSpec =
 
 getSquaresWithPiecesSpec :: Spec
 getSquaresWithPiecesSpec =
-        describe "getSquaresWithPieces" $ do
+        describe "getSquaresWithPieces" $
           it "should return list of coordinates that have given piecetype on them" $ do
              getSquaresWithPieces initialBoard Rook `shouldMatchList` map coord ["a1", "h1", "a8", "h8"]
              getSquaresWithPieces initialBoard Queen `shouldMatchList` map coord ["d1", "d8"]
