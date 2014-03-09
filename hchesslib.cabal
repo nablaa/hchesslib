@@ -39,3 +39,11 @@ Test-Suite spec
                         , containers >= 0.4
                         , attoparsec
                         , text
+
+Test-suite hlint
+  type:                 exitcode-stdio-1.0
+  Default-language:     Haskell2010
+  Hs-source-dirs:       test
+  Main-is:              HLint.hs
+  Build-depends:        base
+                        , hlint >= 1.8
