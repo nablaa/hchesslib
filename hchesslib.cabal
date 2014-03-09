@@ -30,7 +30,7 @@ Test-Suite spec
   Type:                 exitcode-stdio-1.0
   Default-Language:     Haskell2010
   Hs-Source-Dirs:       test, src
-  Ghc-Options:          -Wall
+  Ghc-Options:          -Wall -Werror
   Main-Is:              Spec.hs
   Build-Depends:        base
                         , hspec >= 1.5
