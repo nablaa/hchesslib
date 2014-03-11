@@ -1,11 +1,11 @@
-module Game (applyMove, isCheckmate, isStalemate, isInsufficientMaterial,
-             isDraw, getWinner) where
+module Chess.Game (applyMove, isCheckmate, isStalemate, isInsufficientMaterial,
+                   isDraw, getWinner) where
 
 import Data.List
-import Piece
-import Move
+import Chess.Piece
+import Chess.Move
+import Chess.Board
 import Data.Maybe
-import Board
 
 applyMove :: GameState -> Move -> Either MoveError GameState
 applyMove game move = case moveError of

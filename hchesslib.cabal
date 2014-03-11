@@ -4,7 +4,7 @@
 name:                hchesslib
 version:             0.1.0.0
 synopsis:            Chess library
--- description:
+description:         Library implementing chess rules.
 license:             GPL-2
 license-file:        LICENSE
 author:              Miika-Petteri Matikainen
@@ -17,8 +17,12 @@ cabal-version:       >=1.10
 
 Library
   Default-Language:     Haskell2010
-  exposed-modules:      Piece, Board, Move, FEN, Notation
   Hs-Source-Dirs:       src
+  exposed-modules:      Chess.Piece,
+                        Chess.Board,
+                        Chess.Move,
+                        Chess.FEN,
+                        Chess.Notation
 
   Build-depends:        base
                         , array >= 0.4
@@ -29,7 +33,7 @@ Library
 Test-Suite spec
   Type:                 exitcode-stdio-1.0
   Default-Language:     Haskell2010
-  Hs-Source-Dirs:       test, src
+  Hs-Source-Dirs:       src, test, test/Chess
   Ghc-Options:          -Wall -Werror
   Main-Is:              Spec.hs
   Build-Depends:        base
@@ -39,11 +43,13 @@ Test-Suite spec
                         , containers >= 0.4
                         , attoparsec
                         , text
+                        , hchesslib
 
 Test-suite hlint
   type:                 exitcode-stdio-1.0
   Default-language:     Haskell2010
-  Hs-source-dirs:       test
+  Hs-source-dirs:       src, test, test/Chess
   Main-is:              HLint.hs
   Build-depends:        base
                         , hlint >= 1.8
+                        , hchesslib

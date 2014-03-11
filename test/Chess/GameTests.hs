@@ -1,9 +1,9 @@
 module GameTests where
 
-import FEN
-import Piece
-import Move
-import Game
+import Chess.FEN
+import Chess.Piece
+import Chess.Move
+import Chess.Game
 import TestUtils
 import Test.Hspec
 

@@ -1,6 +1,6 @@
 module PieceTests where
 
-import Piece
+import Chess.Piece
 import Test.Hspec
 
 pieceSpec :: IO ()

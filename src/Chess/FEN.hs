@@ -1,8 +1,8 @@
-module FEN (writeFEN, readFEN, writeCastlings) where
+module Chess.FEN (writeFEN, readFEN, writeCastlings) where
 
-import Move
-import Board
-import Piece
+import Chess.Move
+import Chess.Board
+import Chess.Piece
 import Data.List
 import Data.Char
 import Data.Maybe

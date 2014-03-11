@@ -1,8 +1,8 @@
 module TestUtils (coord, game, fenBoard) where
 
-import Board
-import Move
-import FEN
+import Chess.Board
+import Chess.Move
+import Chess.FEN
 import Data.Maybe
 
 coord :: String -> Coordinates

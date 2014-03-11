@@ -1,17 +1,17 @@
-module Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
-              parseCoordinate, isInsideBoard, getPiece, movePiece,
-              parseBoardCompact, printCoordinate, isEmpty, isOpponentSquare,
-              firstPieceInSquareList, iterateDirectionInsideBoard,
-              getKingSquare, rookPattern, bishopPattern, knightPattern,
-              queenPattern, isSquareThreatened, sumSquares,
-              isCheck, getSquaresWithOwner, addPiece, removePiece,
-              getPlayerPieces, getSquareColor, getSquaresWithPieces) where
+module Chess.Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
+                    parseCoordinate, isInsideBoard, getPiece, movePiece,
+                    parseBoardCompact, printCoordinate, isEmpty, isOpponentSquare,
+                    firstPieceInSquareList, iterateDirectionInsideBoard,
+                    getKingSquare, rookPattern, bishopPattern, knightPattern,
+                    queenPattern, isSquareThreatened, sumSquares,
+                    isCheck, getSquaresWithOwner, addPiece, removePiece,
+                    getPlayerPieces, getSquareColor, getSquaresWithPieces) where
 
 import Data.Array
 import Data.Char
 import Data.List
 import Data.Maybe
-import Piece
+import Chess.Piece
 
 data Square = Square Piece | Empty
               deriving (Eq, Show)

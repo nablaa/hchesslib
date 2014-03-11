@@ -1,16 +1,16 @@
-module Move (GameState(..), Move(..), CastlingType(..),
-             MoveError(..), isRightPlayerMove,
-             isMoveError, initialState,
-             isCorrectStartPiece, areCoordinatesValid,
-             generateAllRookMoves, iterateMovementSquares,
-             iterateDirection, generateAllBishopMoves,
-             generateAllQueenMoves, generateAllKnightMoves,
-             generateAllKingMoves, generateAllPawnMoves,
-             generateAllPotentialMoves, boardAfterMove,
-             generateAllMoves)  where
+module Chess.Move (GameState(..), Move(..), CastlingType(..),
+                   MoveError(..), isRightPlayerMove,
+                   isMoveError, initialState,
+                   isCorrectStartPiece, areCoordinatesValid,
+                   generateAllRookMoves, iterateMovementSquares,
+                   iterateDirection, generateAllBishopMoves,
+                   generateAllQueenMoves, generateAllKnightMoves,
+                   generateAllKingMoves, generateAllPawnMoves,
+                   generateAllPotentialMoves, boardAfterMove,
+                   generateAllMoves)  where
 
-import Piece
-import Board
+import Chess.Piece
+import Chess.Board
 import Data.Maybe
 
 data GameState = State {

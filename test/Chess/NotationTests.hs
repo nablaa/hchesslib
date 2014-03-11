@@ -1,8 +1,8 @@
 module NotationTests where
 
-import Piece
-import Move
-import Notation
+import Chess.Piece
+import Chess.Move
+import Chess.Notation
 import TestUtils
 import Test.Hspec
 
