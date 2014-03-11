@@ -1,9 +1,9 @@
 module FENTests where
 
-import Chess.Piece
-import Chess.Board
-import Chess.FEN
-import Chess.Move
+import Chess.Internal.Piece
+import Chess.Internal.Board
+import Chess.Internal.FEN
+import Chess.Internal.Move
 import Test.Hspec
 
 fenSpec :: IO ()
@@ -19,11 +19,11 @@ writeFENSpec =
             writeFEN initialState `shouldBe` "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
           it "should serialize En Passant move and move counters correctly" $
-            writeFEN (Chess.Move.State initialBoard Black [] [] (parseCoordinate "e3") 4 14) `shouldBe` "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b - e3 4 14"
+            writeFEN (Chess.Internal.Move.State initialBoard Black [] [] (parseCoordinate "e3") 4 14) `shouldBe` "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b - e3 4 14"
 
           it "should serialize castlings correctly" $ do
-            writeFEN (Chess.Move.State initialBoard White [] [Long] (parseCoordinate "c6") 0 9) `shouldBe` "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w q c6 0 9"
-            writeFEN (Chess.Move.State initialBoard White [Long] [Short] (parseCoordinate "c6") 0 9) `shouldBe` "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Qk c6 0 9"
+            writeFEN (Chess.Internal.Move.State initialBoard White [] [Long] (parseCoordinate "c6") 0 9) `shouldBe` "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w q c6 0 9"
+            writeFEN (Chess.Internal.Move.State initialBoard White [Long] [Short] (parseCoordinate "c6") 0 9) `shouldBe` "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Qk c6 0 9"
 
 readFENSpec :: Spec
 readFENSpec =
@@ -32,8 +32,8 @@ readFENSpec =
             readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1" `shouldBe` Just initialState
 
           it "should read FEN with castlings, En Passant and move counters correctly" $ do
-            readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Kq e3 7 14" `shouldBe` Just (Chess.Move.State initialBoard White [Short] [Long] (parseCoordinate "e3") 7 14)
-            readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 10 42" `shouldBe` Just (Chess.Move.State initialBoard White [] [] Nothing 10 42)
+            readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Kq e3 7 14" `shouldBe` Just (Chess.Internal.Move.State initialBoard White [Short] [Long] (parseCoordinate "e3") 7 14)
+            readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 10 42" `shouldBe` Just (Chess.Internal.Move.State initialBoard White [] [] Nothing 10 42)
 
           it "should not read FEN with missing castling information" $
             readFEN "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - 0 1" `shouldBe` Nothing

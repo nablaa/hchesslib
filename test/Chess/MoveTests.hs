@@ -1,8 +1,8 @@
 module MoveTests where
 
-import Chess.Piece
-import Chess.Board
-import Chess.Move
+import Chess.Internal.Piece
+import Chess.Internal.Board
+import Chess.Internal.Move
 import TestUtils
 import Test.Hspec
 

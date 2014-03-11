@@ -1,7 +1,7 @@
 module BoardTests where
 
-import Chess.Piece
-import Chess.Board
+import Chess.Internal.Piece
+import Chess.Internal.Board
 import Data.Maybe
 import TestUtils
 import Test.Hspec

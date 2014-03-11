@@ -1,4 +1,4 @@
-module Chess.Piece (Piece(..), Color(..), PieceType(..), opponent, printPiece,
+module Chess.Internal.Piece (Piece(..), Color(..), PieceType(..), opponent, printPiece,
                     parsePiece, parsePieceType) where
 
 import Data.Char

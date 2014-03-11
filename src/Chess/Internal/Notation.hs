@@ -1,8 +1,8 @@
-module Chess.Notation (parseMove, parseCoordinateNotation, parseCoordinateStringWithPromotion) where
+module Chess.Internal.Notation (parseMove, parseCoordinateNotation, parseCoordinateStringWithPromotion) where
 
-import Chess.Move
-import Chess.Board
-import Chess.Piece
+import Chess.Internal.Move
+import Chess.Internal.Board
+import Chess.Internal.Piece
 import Data.List
 import Data.Char
 import Data.Attoparsec.Text

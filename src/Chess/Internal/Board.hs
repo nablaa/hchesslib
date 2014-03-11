@@ -1,4 +1,4 @@
-module Chess.Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
+module Chess.Internal.Board (Board, Coordinates, initialBoard, emptyBoard, printBoardCompact,
                     parseCoordinate, isInsideBoard, getPiece, movePiece,
                     parseBoardCompact, printCoordinate, isEmpty, isOpponentSquare,
                     firstPieceInSquareList, iterateDirectionInsideBoard,
@@ -11,7 +11,7 @@ import Data.Array
 import Data.Char
 import Data.List
 import Data.Maybe
-import Chess.Piece
+import Chess.Internal.Piece
 
 data Square = Square Piece | Empty
               deriving (Eq, Show)

@@ -1,10 +1,10 @@
-module Chess.Game (applyMove, isCheckmate, isStalemate, isInsufficientMaterial,
+module Chess.Internal.Game (applyMove, isCheckmate, isStalemate, isInsufficientMaterial,
                    isDraw, getWinner) where
 
 import Data.List
-import Chess.Piece
-import Chess.Move
-import Chess.Board
+import Chess.Internal.Piece
+import Chess.Internal.Move
+import Chess.Internal.Board
 import Data.Maybe
 
 applyMove :: GameState -> Move -> Either MoveError GameState

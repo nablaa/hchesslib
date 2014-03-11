@@ -1,4 +1,4 @@
-module Chess.Move (GameState(..), Move(..), CastlingType(..),
+module Chess.Internal.Move (GameState(..), Move(..), CastlingType(..),
                    MoveError(..), isRightPlayerMove,
                    isMoveError, initialState,
                    isCorrectStartPiece, areCoordinatesValid,
@@ -9,8 +9,8 @@ module Chess.Move (GameState(..), Move(..), CastlingType(..),
                    generateAllPotentialMoves, boardAfterMove,
                    generateAllMoves)  where
 
-import Chess.Piece
-import Chess.Board
+import Chess.Internal.Piece
+import Chess.Internal.Board
 import Data.Maybe
 
 data GameState = State {
