@@ -24,7 +24,7 @@ Library
                         Chess.FEN,
                         Chess.Notation
 
-  Build-depends:        base
+  Build-depends:        base >= 4 && < 5
                         , array >= 0.4
                         , containers >= 0.4
                         , attoparsec
@@ -36,7 +36,8 @@ Test-Suite spec
   Hs-Source-Dirs:       src, test, test/Chess
   Ghc-Options:          -Wall -Werror
   Main-Is:              Spec.hs
-  Build-Depends:        base
+
+  Build-Depends:        base >= 4 && < 5
                         , hspec >= 1.5
                         , QuickCheck
                         , array >= 0.4
@@ -50,6 +51,7 @@ Test-suite hlint
   Default-language:     Haskell2010
   Hs-source-dirs:       src, test, test/Chess
   Main-is:              HLint.hs
-  Build-depends:        base
+
+  Build-depends:        base >= 4 && < 5
                         , hlint >= 1.8
                         , hchesslib
