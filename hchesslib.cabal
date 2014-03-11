@@ -18,7 +18,10 @@ cabal-version:       >=1.10
 Library
   Default-Language:     Haskell2010
   Hs-Source-Dirs:       src
-  exposed-modules:      Chess.Internal.Piece,
+
+  exposed-modules:      Chess.FEN
+
+  other-modules:        Chess.Internal.Piece,
                         Chess.Internal.Board,
                         Chess.Internal.Move,
                         Chess.Internal.FEN,

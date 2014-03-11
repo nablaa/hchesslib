@@ -2,7 +2,7 @@ module FENTests where
 
 import Chess.Internal.Piece
 import Chess.Internal.Board
-import Chess.Internal.FEN
+import Chess.FEN
 import Chess.Internal.Move
 import Test.Hspec
 

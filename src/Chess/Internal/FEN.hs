@@ -1,4 +1,4 @@
-module Chess.Internal.FEN (writeFEN, readFEN, writeCastlings) where
+module Chess.Internal.FEN where
 
 import Chess.Internal.Move
 import Chess.Internal.Board
@@ -27,25 +27,6 @@ writeCastlings white black = sort (map (castlingToChar White) white ++ map (cast
 writeEnPassant :: Maybe Coordinates -> String
 writeEnPassant Nothing = "-"
 writeEnPassant (Just coordinate) = printCoordinate coordinate
-
-writeFEN :: GameState -> String
-writeFEN state = unwords [writeBoard (stateBoard state),
-                          writePlayer (currentPlayer state),
-                          writeCastlings (whiteCastlingsPossible state) (blackCastlingsPossible state),
-                          writeEnPassant (enPassantSquare state),
-                          show (halfmoveClock state),
-                          show (moveNumber state)]
-
-readFEN :: String -> Maybe GameState
-readFEN str | length parts /= 6 = Nothing
-            | otherwise = do board' <- readBoard $ head parts
-                             player <- readPlayer $ parts !! 1
-                             castlings <- readCastlings $ parts !! 2
-                             enPassant <- readEnPassant $ parts !! 3
-                             halfmoves <- readNumberWithLimit 0 $ parts !! 4
-                             moves <- readNumberWithLimit 1 $ parts !! 5
-                             return $ uncurry (State board' player) castlings enPassant halfmoves moves
-        where parts = words str
 
 readBoard :: String -> Maybe Board
 readBoard str | length parts /= 8 = Nothing
