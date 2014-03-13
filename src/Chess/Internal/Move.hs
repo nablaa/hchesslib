@@ -29,7 +29,7 @@ data Move = Movement Piece Coordinates Coordinates
           | EnPassant Piece Coordinates Coordinates
           | Promotion Piece Coordinates Coordinates PieceType
           | PawnDoubleMove Piece Coordinates Coordinates
-          deriving (Show, Eq, Ord)
+          deriving (Show, Eq)
 
 data CastlingType = Short | Long
                   deriving (Show, Eq, Ord)

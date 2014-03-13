@@ -4,13 +4,13 @@ module Chess.Internal.Piece (Piece(..), Color(..), PieceType(..), opponent, prin
 import Data.Char
 
 data Piece = Piece Color PieceType
-           deriving (Show, Eq, Ord)
+           deriving (Show, Eq)
 
 data Color = White | Black
-           deriving (Show, Eq, Ord)
+           deriving (Show, Eq)
 
 data PieceType = Pawn | Knight | Bishop | Rook | Queen | King
-           deriving (Show, Eq, Ord)
+           deriving (Show, Eq)
 
 opponent :: Color -> Color
 opponent White = Black
