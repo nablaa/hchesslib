@@ -9,10 +9,11 @@ license:             GPL-2
 license-file:        LICENSE
 author:              Miika-Petteri Matikainen
 maintainer:          miikapetteri@gmail.com
+homepage:            https://github.com/nablaa/hchesslib
 -- copyright:
 category:            Game
 build-type:          Simple
--- extra-source-files:
+extra-source-files:  README.md
 cabal-version:       >=1.10
 
 source-repository head
