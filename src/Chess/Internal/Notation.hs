@@ -10,7 +10,7 @@ import qualified Data.Text as T
 import Control.Applicative
 
 parseMove :: GameState -> String -> Maybe Move
-parseMove = undefined
+parseMove = parseCoordinateNotation
 
 parseCoordinateNotation :: GameState -> String -> Maybe Move
 parseCoordinateNotation game moveString = case parseOnly parseCoordinateStringWithPromotion (T.pack moveString) of

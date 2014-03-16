@@ -5,7 +5,7 @@ module Chess.Internal.Board (Board, Coordinates, initialBoard, emptyBoard, print
                     getKingSquare, rookPattern, bishopPattern, knightPattern,
                     queenPattern, isSquareThreatened, sumSquares,
                     isCheck, getSquaresWithOwner, addPiece, removePiece,
-                    getPlayerPieces, getSquareColor, getSquaresWithPieces) where
+                    getPlayerPieces, getSquareColor, getSquaresWithPieces, Square(..)) where
 
 import Data.Array
 import Data.Char
