@@ -75,8 +75,8 @@ isInsideBoard :: Coordinates -> Bool
 isInsideBoard (i, j) = i >= 0 && i <= 7 && j >= 0 && j <= 7
 
 parseCoordinate :: String -> Maybe Coordinates
-parseCoordinate (column:row:[]) | isInsideBoard coordinates = Just coordinates
-                                    | otherwise = Nothing
+parseCoordinate [column, row] | isInsideBoard coordinates = Just coordinates
+                              | otherwise = Nothing
     where coordinates = (ord '8' - ord row, ord column - ord 'a')
 parseCoordinate _ = Nothing
 
