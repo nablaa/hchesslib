@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                hchesslib
-version:             0.1.0.0
+version:             0.1.1.0
 synopsis:            Chess library
 description:         Library implementing chess rules.
 license:             GPL-2
