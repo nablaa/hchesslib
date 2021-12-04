@@ -188,9 +188,9 @@ castlingSquares Black Long = [(0, 1), (0, 2), (0, 3)]
 castlingSquares Black Short = [(0, 5), (0, 6)]
 
 patternMoves :: GameState -> Coordinates -> [(Int, Int)] -> [Move]
-patternMoves game start pattern
-        = concat [movementsInDirection game start dir | dir <- pattern]
-        ++ concat [capturesInDirection game start dir | dir <- pattern]
+patternMoves game start pattern'
+        = concat [movementsInDirection game start dir | dir <- pattern']
+        ++ concat [capturesInDirection game start dir | dir <- pattern']
 
 movementsInDirection :: GameState -> Coordinates -> (Int, Int) -> [Move]
 movementsInDirection game start direction = map (Movement piece start) squares

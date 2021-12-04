@@ -170,7 +170,7 @@ isSquareThreatened board opponentPlayer coords = knightsThreaten || pawnsThreate
               isOpponentKnight square = case getPiece board square of
                                                 Just (Piece player Knight) -> player == opponentPlayer
                                                 _ -> False
-              pawnsThreaten = any isOpponentPawn $ map (sumSquares coords) pawnSquares
+              pawnsThreaten = any (isOpponentPawn . sumSquares coords) pawnSquares
               pawnSquares = case opponentPlayer of
                                     White -> [(1, -1), (1, 1)]
                                     Black -> [(-1, -1), (-1, 1)]
@@ -210,5 +210,5 @@ getPlayerPieces board player = map (typeFromPiece . fromJust . getPiece board) (
         where typeFromPiece (Piece _ pieceType) = pieceType
 
 getSquareColor :: Coordinates -> Color
-getSquareColor (row, column) | (row + column) `mod` 2 == 0 = White
+getSquareColor (row, column) | even (row + column) = White
                              | otherwise = Black

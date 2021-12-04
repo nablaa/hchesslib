@@ -1,4 +1,3 @@
-import Test.Hspec
 import GameTests
 import NotationTests
 import BoardTests

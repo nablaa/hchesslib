@@ -5,7 +5,6 @@ import Chess.Internal.Board
 import Chess.Internal.Piece
 import Data.List
 import Data.Char
-import Data.Maybe
 
 writeBoard :: Board -> String
 writeBoard = intercalate "/" . lines . concatMap emptyToNum . group . printBoardCompact
@@ -74,7 +73,7 @@ readNumberWithLimit limit str = case readMaybe str of
                                                          else Nothing
 
 readMaybe :: Read a => String -> Maybe a
-readMaybe = fmap fst . listToMaybe . filter (null . snd) . reads
+readMaybe = fmap fst . find (null . snd) . reads
 
 split :: (Char -> Bool) -> String -> [String]
 split p str = case dropWhile p str of
