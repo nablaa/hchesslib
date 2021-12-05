@@ -24,7 +24,7 @@ Library
   Default-Language:     Haskell2010
   Hs-Source-Dirs:       src
 
-  exposed-modules:      Chess, Chess.FEN
+  exposed-modules:      Chess, Chess.FEN, Chess.UI
 
   other-modules:        Chess.Internal.Piece,
                         Chess.Internal.Board,
@@ -47,7 +47,9 @@ Test-Suite spec
   Main-Is:              Spec.hs
 
   Other-modules:        BoardTests,
+                        Chess,
                         Chess.FEN,
+                        Chess.UI,
                         Chess.Internal.Board,
                         Chess.Internal.FEN,
                         Chess.Internal.Game,
@@ -59,7 +61,8 @@ Test-Suite spec
                         MoveTests,
                         NotationTests,
                         PieceTests,
-                        TestUtils
+                        TestUtils,
+                        UITests
 
   Build-Depends:        base >= 4 && < 5
                         , hspec >= 1.5

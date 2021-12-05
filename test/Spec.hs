@@ -4,6 +4,7 @@ import BoardTests
 import FENTests
 import MoveTests
 import PieceTests
+import UITests
 
 main :: IO ()
 main = do gameSpec
@@ -12,3 +13,4 @@ main = do gameSpec
           fenSpec
           moveSpec
           pieceSpec
+          uiSpec
