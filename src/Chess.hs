@@ -17,6 +17,7 @@ module Chess (
               Chess.Internal.Piece.Color(..),
               Chess.Internal.Piece.Piece(..),
               Chess.Internal.Piece.PieceType(..),
+              Chess.Internal.Move.Move,
               board,
               fullMoveNumber,
               isCheckmate,
@@ -27,6 +28,8 @@ module Chess (
               newGame,
               pieceAt,
               winner,
+              legalMoves,
+              applyMove,
               ) where
 
 import Chess.Internal.Board
@@ -67,9 +70,7 @@ move :: GameState
      -> String          -- ^ Move in coordinate notation. E.g. "e2-e4" or "b1-c3"
      -> Maybe GameState
 move game moveStr = do m <- N.parseMove game moveStr
-                       case G.applyMove game m of
-                               Left _ -> Nothing
-                               Right game' -> Just game'
+                       applyMove game m
 
 -- | Current board state in the game
 board :: GameState -> Board
@@ -89,3 +90,13 @@ pieceAt b coordinateStr = do coords <- parseCoordinate coordinateStr
 -- | Full move number. Incremented after black's move.
 fullMoveNumber :: GameState -> Integer
 fullMoveNumber = moveNumber
+
+-- | Get all legal moves in the position
+legalMoves :: GameState -> [Move]
+legalMoves = generateAllMoves
+
+-- | Apply a move
+applyMove :: GameState -> Move -> Maybe GameState
+applyMove game m = case G.applyMove game m of
+                        Left _ -> Nothing
+                        Right game' -> Just game'

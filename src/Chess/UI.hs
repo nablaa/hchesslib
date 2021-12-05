@@ -9,14 +9,17 @@
 --
 -- Visualize chess games
 module Chess.UI (
-             printBoard
+             printBoard,
+             coordinateNotation
               ) where
 
 import Data.Array
 import Data.List
 import Data.Char
+import Data.Maybe
 import Chess.Internal.Board
 import Chess.Internal.Piece
+import Chess.Internal.Move
 
 -- | Prints the board in ASCII.
 --
@@ -63,3 +66,16 @@ printRow row = sep ++ intercalate sep (map printSquare row) ++ sep ++ "\n"
 printSquare :: Square -> String
 printSquare Empty = "   "
 printSquare (Square p) = " " ++ printPiece p ++ " "
+
+-- | Prints the move in coordinate notation.
+-- E.g. "e2-e4", "g1-g3", "b2-c1q"
+coordinateNotation :: Move -> String
+coordinateNotation (Movement _ c1 c2) = printCoordinate c1 ++ "-" ++ printCoordinate c2
+coordinateNotation (Capture _ c1 c2) = printCoordinate c1 ++ "-" ++ printCoordinate c2
+coordinateNotation (EnPassant _ c1 c2) = printCoordinate c1 ++ "-" ++ printCoordinate c2
+coordinateNotation (PawnDoubleMove _ c1 c2) = printCoordinate c1 ++ "-" ++ printCoordinate c2
+coordinateNotation (Promotion _ c1 c2 p) = printCoordinate c1 ++ "-" ++ printCoordinate c2 ++ [toLower (fromJust (lookup p pieceChars))]
+coordinateNotation (Castling White Short) = "e1-g1"
+coordinateNotation (Castling White Long) = "e1-c1"
+coordinateNotation (Castling Black Short) = "e8-g8"
+coordinateNotation (Castling Black Long) = "e8-c8"

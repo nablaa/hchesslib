@@ -1,5 +1,5 @@
 module Chess.Internal.Piece (Piece(..), Color(..), PieceType(..), opponent, printPiece,
-                    parsePiece, parsePieceType) where
+                    parsePiece, pieceChars, parsePieceType) where
 
 import Data.Char
 
